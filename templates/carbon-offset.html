@@ -1,0 +1,1058 @@
+{% extends "base.html" %} {% block title %}Carbon Offset- EcoAir{% endblock %}
+{% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/carbon-styles.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<nav class="subnav">
+  <div class="container">
+    <a href="{{ url_for('index') }}" class="back-btn"
+      ><i class="fas fa-arrow-left"></i> Back to EcoAir</a
+    >
+    <div class="subnav-links">
+      <a href="{{ url_for('renewable_energy') }}">Renewable Energy</a>
+      <a href="{{ url_for('waste_management') }}">Waste Management</a>
+      <a href="{{ url_for('green_companies') }}">Green Companies</a>
+      <a href="{{ url_for('carbon_offset') }}" class="active">Carbon Offset</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <section class="carbon-page-hero">
+    <div class="carbon-hero-content">
+      <h2>Balance Your Carbon Footprint</h2>
+      <p>Calculate, offset, and track your journey to carbon neutrality</p>
+    </div>
+    <div class="carbon-hero-stats">
+      <div class="carbon-stat">
+        <div class="carbon-stat-number" id="carbon-total-offset">0</div>
+        <div class="carbon-stat-label">CO₂ Offset (tons)</div>
+      </div>
+      <div class="carbon-stat">
+        <div class="carbon-stat-number" id="carbon-projects-supported">0</div>
+        <div class="carbon-stat-label">Projects Supported</div>
+      </div>
+      <div class="carbon-stat">
+        <div class="carbon-stat-number" id="carbon-neutrality">0%</div>
+        <div class="carbon-stat-label">Carbon Neutrality</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Carbon Calculator -->
+  <section class="carbon-carbon-calculator">
+    <h2><i class="fas fa-calculator"></i> Carbon Footprint Calculator</h2>
+    <p>Calculate your carbon emissions and discover offset options</p>
+
+    <div class="carbon-calculator-grid">
+      <div class="carbon-calc-input">
+        <h4><i class="fas fa-bolt"></i> Energy Usage</h4>
+        <label>Monthly Electricity (kWh):</label>
+        <input
+          type="number"
+          id="carbon-electricity"
+          placeholder="Enter kWh"
+          min="0"
+        />
+        <label>Natural Gas (therms):</label>
+        <input
+          type="number"
+          id="carbon-natural-gas"
+          placeholder="Enter therms"
+          min="0"
+        />
+      </div>
+
+      <div class="carbon-calc-input">
+        <h4><i class="fas fa-car"></i> Transportation</h4>
+        <label>Miles Driven (monthly):</label>
+        <input
+          type="number"
+          id="carbon-miles-driven"
+          placeholder="Enter miles"
+          min="0"
+        />
+        <label>Flights (hours/year):</label>
+        <input
+          type="number"
+          id="carbon-flights"
+          placeholder="Enter hours"
+          min="0"
+        />
+      </div>
+
+      <div class="carbon-calc-input">
+        <h4><i class="fas fa-home"></i> Lifestyle</h4>
+        <label>Diet Type:</label>
+        <select id="carbon-diet-type">
+          <option value="vegan">Vegan</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="meat-light">Meat - Light</option>
+          <option value="meat-heavy">Meat - Heavy</option>
+        </select>
+        <label>Shopping ($/month):</label>
+        <input
+          type="number"
+          id="carbon-shopping"
+          placeholder="Enter amount"
+          min="0"
+        />
+      </div>
+    </div>
+
+    <div class="carbon-action-buttons">
+      <button class="carbon-action-btn" onclick="carbonCalculateFootprint()">
+        <i class="fas fa-calculator"></i> Calculate Footprint
+      </button>
+      <button
+        class="carbon-action-btn"
+        onclick="carbonSaveFootprint()"
+        style="background: #4caf50"
+      >
+        <i class="fas fa-save"></i> Save Calculation
+      </button>
+      <button
+        class="carbon-action-btn"
+        onclick="carbonResetCalculator()"
+        style="background: #e74c3c"
+      >
+        <i class="fas fa-redo"></i> Reset
+      </button>
+    </div>
+
+    <div
+      id="carbon-footprint-result"
+      style="
+        display: none;
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 8px;
+      "
+    >
+      <h3>Your Carbon Footprint Analysis</h3>
+      <div id="carbon-total-emissions"></div>
+      <div id="carbon-offset-recommendation"></div>
+      <div id="carbon-comparison-stats"></div>
+      <div class="carbon-action-buttons">
+        <button class="carbon-action-btn" onclick="carbonShowOffsetProjects()">
+          <i class="fas fa-tree"></i> View Offset Projects
+        </button>
+        <button
+          class="carbon-action-btn"
+          onclick="carbonShareFootprint()"
+          style="background: #3498db"
+        >
+          <i class="fas fa-share"></i> Share Results
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Offset Projects -->
+  <section>
+    <h2><i class="fas fa-globe-americas"></i> Verified Offset Projects</h2>
+    <p>
+      Support certified projects that remove or prevent greenhouse gas emissions
+    </p>
+
+    <div class="carbon-projects-grid" id="carbon-projects-container"></div>
+  </section>
+
+  <!-- Investment Plans -->
+  <section>
+    <h2><i class="fas fa-piggy-bank"></i> Carbon Offset Plans</h2>
+    <p>Choose a plan that fits your budget and environmental goals</p>
+
+    <div class="carbon-investment-plans">
+      <div class="carbon-plan-card">
+        <h3><i class="fas fa-seedling"></i> Starter Plan</h3>
+        <div class="carbon-price">$10/month</div>
+        <p>Offset 1 ton CO₂ monthly</p>
+        <div class="carbon-plan-features">
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> 1 Verified
+            Project
+          </li>
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> Basic
+            Certificate
+          </li>
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> Progress
+            Tracking
+          </li>
+          <li>
+            <i class="fas fa-times" style="color: #e74c3c"></i> Impact Reports
+          </li>
+        </div>
+        <button class="carbon-action-btn" onclick="carbonSelectPlan('starter')">
+          Select Plan
+        </button>
+      </div>
+
+      <div class="carbon-plan-card" style="border: 2px solid #ff9a9e">
+        <h3><i class="fas fa-tree"></i> Eco Plan</h3>
+        <div class="carbon-price">$25/month</div>
+        <p>Offset 3 tons CO₂ monthly</p>
+        <div class="carbon-plan-features">
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> 3 Verified
+            Projects
+          </li>
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> Premium
+            Certificate
+          </li>
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> Detailed
+            Tracking
+          </li>
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> Quarterly
+            Reports
+          </li>
+        </div>
+        <button
+          class="carbon-action-btn"
+          onclick="carbonSelectPlan('eco')"
+          style="background: #4caf50"
+        >
+          Select Plan
+        </button>
+      </div>
+
+      <div class="carbon-plan-card">
+        <h3><i class="fas fa-award"></i> Climate Champion</h3>
+        <div class="carbon-price">$50/month</div>
+        <p>Offset 6 tons CO₂ monthly</p>
+        <div class="carbon-plan-features">
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> 5+ Verified
+            Projects
+          </li>
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> VIP Certificate
+          </li>
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> Real-time
+            Tracking
+          </li>
+          <li>
+            <i class="fas fa-check" style="color: #4caf50"></i> Monthly Reports
+            + Advisor
+          </li>
+        </div>
+        <button
+          class="carbon-action-btn"
+          onclick="carbonSelectPlan('champion')"
+        >
+          Select Plan
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Impact Dashboard -->
+  <section class="carbon-impact-dashboard">
+    <h2><i class="fas fa-chart-line"></i> Your Carbon Offset Impact</h2>
+    <p>Track your progress towards carbon neutrality</p>
+
+    <div class="carbon-dashboard-grid">
+      <div class="carbon-dashboard-card">
+        <i class="fas fa-cloud" style="font-size: 2.5rem; color: #ff9a9e"></i>
+        <h3 id="carbon-lifetime-offset">0</h3>
+        <p>Tons CO₂ Offset</p>
+      </div>
+
+      <div class="carbon-dashboard-card">
+        <i class="fas fa-tree" style="font-size: 2.5rem; color: #ff9a9e"></i>
+        <h3 id="carbon-equivalent-trees">0</h3>
+        <p>Equivalent Trees</p>
+      </div>
+
+      <div class="carbon-dashboard-card">
+        <i class="fas fa-car" style="font-size: 2.5rem; color: #ff9a9e"></i>
+        <h3 id="carbon-cars-removed">0</h3>
+        <p>Cars Off the Road</p>
+      </div>
+
+      <div class="carbon-dashboard-card">
+        <i
+          class="fas fa-calendar"
+          style="font-size: 2.5rem; color: #ff9a9e"
+        ></i>
+        <h3 id="carbon-offset-streak">0</h3>
+        <p>Months Active</p>
+      </div>
+    </div>
+
+    <div class="carbon-action-buttons">
+      <button class="carbon-action-btn" onclick="carbonDownloadImpactReport()">
+        <i class="fas fa-download"></i> Download Report
+      </button>
+      <button
+        class="carbon-action-btn"
+        onclick="carbonShareImpact()"
+        style="background: #3498db"
+      >
+        <i class="fas fa-share"></i> Share Impact
+      </button>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section class="carbon-portfolio-section">
+    <h2><i class="fas fa-briefcase"></i> Your Offset Portfolio</h2>
+    <p>Manage and track your supported projects</p>
+
+    <div class="carbon-portfolio-grid" id="carbon-portfolio-container"></div>
+  </section>
+
+  <!-- Certificate Section -->
+  <section class="carbon-certificate-section">
+    <h2><i class="fas fa-certificate"></i> Carbon Neutral Certificate</h2>
+    <p>Get recognized for your environmental commitment</p>
+    <div id="carbon-certificate-status">
+      <p>Complete your first offset to unlock your certificate!</p>
+    </div>
+    <div class="carbon-action-buttons">
+      <button
+        class="carbon-action-btn"
+        onclick="carbonViewCertificate()"
+        style="background: white; color: #ff9a9e"
+      >
+        <i class="fas fa-eye"></i> View Certificate
+      </button>
+      <button
+        class="carbon-action-btn"
+        onclick="carbonDownloadCertificate()"
+        style="background: white; color: #ff9a9e"
+      >
+        <i class="fas fa-download"></i> Download
+      </button>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Carbon offset data
+  let carbonData = JSON.parse(localStorage.getItem("carbonData")) || {
+    footprint: 0,
+    totalOffset: 0,
+    projectsSupported: [],
+    activePlan: null,
+    portfolio: [],
+    certificates: [],
+    impact: {
+      treesEquivalent: 0,
+      carsRemoved: 0,
+      monthsActive: 0,
+    },
+  };
+
+  // projects data
+  const carbonOffsetProjects = [
+    {
+      id: 1,
+      name: "Amazon Rainforest Protection",
+      type: "forestry",
+      description:
+        "Protecting 10,000 hectares of rainforest from deforestation",
+      location: "Brazil",
+      co2Reduction: 50000,
+      costPerTon: 15,
+      progress: 75,
+      image: "forest",
+      verified: true,
+      features: [
+        "Biodiversity protection",
+        "Community support",
+        "Long-term sustainability",
+      ],
+    },
+    {
+      id: 2,
+      name: "Bay of Bengal Offshore Wind Project",
+      type: "renewable",
+      description:
+        "Developing offshore wind farms in the Bay of Bengal to harness coastal wind energy",
+      location: "Chittagong Coast, Bangladesh",
+      co2Reduction: 32000,
+      costPerTon: 21,
+      progress: 30,
+      image: "wind",
+      verified: true,
+      features: [
+        "Coastal clean energy",
+        "Grid stability",
+        "Port city power supply",
+        "Climate resilience",
+      ],
+    },
+    {
+      id: 3,
+      name: "Wind Energy in Kenya",
+      type: "renewable",
+      description:
+        "Developing wind farms to provide clean energy to 50,000 homes",
+      location: "Kenya",
+      co2Reduction: 30000,
+      costPerTon: 18,
+      progress: 45,
+      image: "wind",
+      verified: true,
+      features: [
+        "Energy independence",
+        "Economic development",
+        "Low maintenance",
+      ],
+    },
+    {
+      id: 4,
+      name: "Methane Capture - Landfill",
+      type: "technology",
+      description:
+        "Capturing methane emissions from landfills for energy production",
+      location: "USA",
+      co2Reduction: 40000,
+      costPerTon: 12,
+      progress: 80,
+      image: "methane",
+      verified: true,
+      features: ["Waste to energy", "Odor reduction", "Renewable gas"],
+    },
+    {
+      id: 5,
+      name: "Mangrove Restoration",
+      type: "blue-carbon",
+      description:
+        "Restoring coastal mangroves that sequester carbon and protect shores",
+      location: "Indonesia",
+      co2Reduction: 15000,
+      costPerTon: 25,
+      progress: 55,
+      image: "mangrove",
+      verified: true,
+      features: [
+        "Coastal protection",
+        "Fisheries support",
+        "Biodiversity hotspot",
+      ],
+    },
+    {
+      id: 6,
+      name: "Solar Irrigation in Barind Region",
+      type: "renewable",
+      description:
+        "Installing solar-powered irrigation systems to replace diesel pumps in drought-prone areas",
+      location: "Bangladesh",
+      co2Reduction: 12000,
+      costPerTon: 16,
+      progress: 50,
+      image: "solar",
+      verified: true,
+      features: [
+        "Agricultural productivity",
+        "Cost savings for farmers",
+        "Clean energy transition",
+        "Water conservation",
+      ],
+    },
+    {
+      id: 7,
+      name: "Sundarbans Mangrove Conservation",
+      type: "blue-carbon",
+      description:
+        "Protecting and restoring the world's largest mangrove forest in Bangladesh",
+      location: "Bangladesh",
+      co2Reduction: 35000,
+      costPerTon: 22,
+      progress: 65,
+      image: "mangrove",
+      verified: true,
+      features: [
+        "Tiger habitat protection",
+        "Coastal resilience",
+        "Fisheries sustainability",
+        "Community livelihood",
+      ],
+    },
+    {
+      id: 8,
+      name: "Clean Cookstoves Africa",
+      type: "efficiency",
+      description:
+        "Providing efficient cookstoves to reduce wood consumption and emissions",
+      location: "Multiple African countries",
+      co2Reduction: 20000,
+      costPerTon: 10,
+      progress: 70,
+      image: "cookstove",
+      verified: true,
+      features: [
+        "Health benefits",
+        "Deforestation reduction",
+        "Women empowerment",
+      ],
+    },
+    {
+      id: 9,
+      name: "Dhaka Waste-to-Energy Project",
+      type: "technology",
+      description:
+        "Converting municipal solid waste into electricity for urban areas",
+      location: "Dhaka, Bangladesh",
+      co2Reduction: 28000,
+      costPerTon: 14,
+      progress: 40,
+      image: "methane",
+      verified: true,
+      features: [
+        "Waste management",
+        "Urban clean energy",
+        "Landfill reduction",
+        "Public health improvement",
+      ],
+    },
+    {
+      id: 10,
+      name: "Chittagong Hill Tracts Reforestation",
+      type: "forestry",
+      description:
+        "Large-scale tree planting and forest restoration in the Chittagong Hill Tracts region",
+      location: "Chittagong, Bangladesh",
+      co2Reduction: 18000,
+      costPerTon: 19,
+      progress: 55,
+      image: "forest",
+      verified: true,
+      features: [
+        "Soil erosion prevention",
+        "Tribal community support",
+        "Biodiversity conservation",
+        "Watershed protection",
+      ],
+    },
+    {
+      id: 11,
+      name: "Solar Farm in India",
+      type: "renewable",
+      description:
+        "Installing solar panels to replace coal power in rural communities",
+      location: "India",
+      co2Reduction: 25000,
+      costPerTon: 20,
+      progress: 60,
+      image: "solar",
+      verified: true,
+      features: ["Clean energy access", "Job creation", "Technology transfer"],
+    },
+    {
+      id: 12,
+      name: "Chittagong Port Electric Vehicle Transition",
+      type: "efficiency",
+      description:
+        "Replacing diesel vehicles and equipment with electric alternatives at Chittagong Port",
+      location: "Chittagong Port, Bangladesh",
+      co2Reduction: 15000,
+      costPerTon: 17,
+      progress: 45,
+      image: "cookstove",
+      verified: true,
+      features: [
+        "Port air quality improvement",
+        "Noise reduction",
+        "Operational cost savings",
+        "Technology upgrade",
+      ],
+    },
+  ];
+
+  document.addEventListener("DOMContentLoaded", function () {
+    carbonLoadProjects();
+    carbonUpdateImpactDashboard();
+    carbonLoadPortfolio();
+    carbonUpdateCertificateStatus();
+  });
+
+  // Calculator functions
+  function carbonCalculateFootprint() {
+    const electricity =
+      parseFloat(document.getElementById("carbon-electricity").value) || 0;
+    const naturalGas =
+      parseFloat(document.getElementById("carbon-natural-gas").value) || 0;
+    const milesDriven =
+      parseFloat(document.getElementById("carbon-miles-driven").value) || 0;
+    const flights =
+      parseFloat(document.getElementById("carbon-flights").value) || 0;
+    const dietType = document.getElementById("carbon-diet-type").value;
+    const shopping =
+      parseFloat(document.getElementById("carbon-shopping").value) || 0;
+
+    // Emission factors (kg CO2e per unit)
+    const factors = {
+      electricity: 0.5, // kg per kWh
+      naturalGas: 5.3, // kg per therm
+      driving: 0.4, // kg per mile
+      flying: 90, // kg per hour
+      diet: {
+        vegan: 2.9,
+        vegetarian: 3.2,
+        "meat-light": 4.7,
+        "meat-heavy": 7.2,
+      },
+      shopping: 0.005, // kg per dollar
+    };
+
+    // Calculate emissions
+    const energyEmissions =
+      electricity * factors.electricity + naturalGas * factors.naturalGas;
+    const transportEmissions =
+      milesDriven * factors.driving + flights * factors.flying;
+    const dietEmissions = factors.diet[dietType] * 30; // Daily to monthly
+    const shoppingEmissions = shopping * factors.shopping;
+
+    const totalEmissions =
+      energyEmissions + transportEmissions + dietEmissions + shoppingEmissions;
+    const annualEmissions = totalEmissions * 12;
+    const tonsAnnual = annualEmissions / 1000;
+
+    carbonData.footprint = tonsAnnual;
+
+    document.getElementById("carbon-total-emissions").innerHTML = `
+            <p><strong>Annual Carbon Footprint:</strong> ${tonsAnnual.toFixed(
+              2
+            )} tons CO₂e</p>
+            <p><strong>Monthly Average:</strong> ${totalEmissions.toFixed(
+              2
+            )} kg CO₂e</p>
+        `;
+
+    document.getElementById("carbon-offset-recommendation").innerHTML = `
+            <p><strong>Recommended Offset:</strong> ${tonsAnnual.toFixed(
+              2
+            )} tons/year</p>
+            <p><strong>Monthly Cost:</strong> $${(
+              (tonsAnnual * 15) /
+              12
+            ).toFixed(2)}</p>
+        `;
+
+    document.getElementById("carbon-comparison-stats").innerHTML = `
+            <p><strong>Comparison:</strong> 
+            🌍 Global average: 4.8 tons/person | 
+            🇺🇸 US average: 14.7 tons/person</p>
+        `;
+
+    document.getElementById("carbon-footprint-result").style.display = "block";
+    carbonSaveCarbonData();
+  }
+
+  function carbonSaveFootprint() {
+    if (carbonData.footprint === 0) {
+      alert("Please calculate your footprint first");
+      return;
+    }
+    carbonShowNotification("Carbon footprint calculation saved!", "success");
+  }
+
+  function carbonResetCalculator() {
+    document.getElementById("carbon-electricity").value = "";
+    document.getElementById("carbon-natural-gas").value = "";
+    document.getElementById("carbon-miles-driven").value = "";
+    document.getElementById("carbon-flights").value = "";
+    document.getElementById("carbon-shopping").value = "";
+    document.getElementById("carbon-footprint-result").style.display = "none";
+  }
+
+  function carbonShowOffsetProjects() {
+    document
+      .getElementById("carbon-projects-container")
+      .scrollIntoView({ behavior: "smooth" });
+  }
+
+  function carbonShareFootprint() {
+    const message = `My carbon footprint is ${carbonData.footprint.toFixed(
+      2
+    )} tons CO₂/year. I'm taking action with EcoAir carbon offset programs!`;
+    alert(`Share your footprint:\n\n"${message}"`);
+  }
+
+  // Project functions
+  function carbonLoadProjects() {
+    const container = document.getElementById("carbon-projects-container");
+    container.innerHTML = "";
+
+    carbonOffsetProjects.forEach((project) => {
+      const isSupported = carbonData.projectsSupported.includes(project.id);
+      const projectImage = carbonGetProjectImage(project.image);
+
+      const projectCard = `
+                <div class="carbon-project-card">
+                    <div class="carbon-project-image" style="background: ${
+                      projectImage.color
+                    };">
+                        <i class="fas fa-${projectImage.icon}"></i>
+                    </div>
+                    <h3>${project.name}</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> ${
+                      project.location
+                    }</p>
+                    <p>${project.description}</p>
+                    
+                    <div class="carbon-progress-bar">
+                        <div class="carbon-progress-fill" style="width: ${
+                          project.progress
+                        }%"></div>
+                    </div>
+                    <p><strong>${
+                      project.progress
+                    }% Funded</strong> • ${project.co2Reduction.toLocaleString()} tons CO₂/year</p>
+                    
+                    <div class="carbon-certification-badges">
+                        <span class="carbon-badge">$${
+                          project.costPerTon
+                        }/ton</span>
+                        <span class="carbon-badge">Verified</span>
+                    </div>
+                    
+                    <div class="carbon-action-buttons">
+                        <button class="carbon-action-btn" onclick="carbonSupportProject(${
+                          project.id
+                        })" 
+                                style="${
+                                  isSupported ? "background: #4CAF50;" : ""
+                                }">
+                            <i class="fas fa-hand-holding-usd"></i> 
+                            ${
+                              isSupported
+                                ? "Supported"
+                                : `Support - $${project.costPerTon}/ton`
+                            }
+                        </button>
+                        <button class="carbon-action-btn" onclick="carbonShowProjectDetails(${
+                          project.id
+                        })" style="background: #3498db;">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                    </div>
+                </div>
+            `;
+      container.innerHTML += projectCard;
+    });
+  }
+
+  function carbonSupportProject(projectId) {
+    const project = carbonOffsetProjects.find((p) => p.id === projectId);
+    if (!project) return;
+
+    if (!carbonData.projectsSupported.includes(projectId)) {
+      carbonData.projectsSupported.push(projectId);
+
+      carbonData.portfolio.push({
+        projectId: projectId,
+        date: new Date().toISOString(),
+        tonsOffset: 1, // 1 ton per support
+        cost: project.costPerTon,
+      });
+
+      carbonData.totalOffset += 1;
+      carbonData.impact.monthsActive = Math.max(
+        1,
+        carbonData.impact.monthsActive
+      );
+
+      carbonUpdateImpactDashboard();
+      carbonLoadPortfolio();
+      carbonUpdateCertificateStatus();
+      carbonSaveCarbonData();
+
+      carbonShowNotification(
+        `Thank you for supporting ${project.name}!`,
+        "success"
+      );
+      carbonLoadProjects();
+    } else {
+      carbonShowNotification(
+        "You are already supporting this project!",
+        "info"
+      );
+    }
+  }
+
+  function carbonShowProjectDetails(projectId) {
+    const project = carbonOffsetProjects.find((p) => p.id === projectId);
+    if (project) {
+      const features = project.features.map((f) => `• ${f}`).join("\n");
+      const details = `
+Project: ${project.name}
+Location: ${project.location}
+Type: ${project.type.toUpperCase()}
+CO₂ Reduction: ${project.co2Reduction.toLocaleString()} tons/year
+Cost: $${project.costPerTon} per ton
+Progress: ${project.progress}% funded
+
+Features:
+${features}
+
+Verification: ${project.verified ? "✅ Verified Carbon Standard" : "⏳ Pending"}
+            `;
+      alert(details);
+    }
+  }
+
+  // Plan selection
+  function carbonSelectPlan(planType) {
+    const plans = {
+      starter: { tons: 1, price: 10, projects: 1 },
+      eco: { tons: 3, price: 25, projects: 3 },
+      champion: { tons: 6, price: 50, projects: 5 },
+    };
+
+    const plan = plans[planType];
+    carbonData.activePlan = planType;
+
+    // Add monthly offset
+    carbonData.totalOffset += plan.tons;
+    carbonData.impact.monthsActive++;
+
+    carbonUpdateImpactDashboard();
+    carbonUpdateCertificateStatus();
+    carbonSaveCarbonData();
+
+    carbonShowNotification(
+      `🎉 ${planType.toUpperCase()} plan activated! You're now offsetting ${
+        plan.tons
+      } tons monthly.`,
+      "success"
+    );
+  }
+
+  // Portfolio management
+  function carbonLoadPortfolio() {
+    const container = document.getElementById("carbon-portfolio-container");
+    container.innerHTML = "";
+
+    if (carbonData.portfolio.length === 0) {
+      container.innerHTML =
+        '<p style="text-align: center; grid-column: 1/-1;">Your portfolio is empty. Start supporting projects above!</p>';
+      return;
+    }
+
+    carbonData.portfolio.forEach((item, index) => {
+      const project = carbonOffsetProjects.find((p) => p.id === item.projectId);
+      if (project) {
+        const portfolioItem = `
+                    <div class="carbon-portfolio-item">
+                        <h4>${project.name}</h4>
+                        <p><strong>Supported:</strong> ${new Date(
+                          item.date
+                        ).toLocaleDateString()}</p>
+                        <p><strong>Offset:</strong> ${
+                          item.tonsOffset
+                        } tons CO₂</p>
+                        <p><strong>Investment:</strong> $${
+                          item.cost * item.tonsOffset
+                        }</p>
+                        <div class="carbon-action-buttons">
+                            <button class="carbon-action-btn" onclick="carbonIncreaseSupport(${index})" style="padding: 8px 15px;">
+                                <i class="fas fa-plus"></i> Add More
+                            </button>
+                            <button class="carbon-action-btn" onclick="carbonRemoveFromPortfolio(${index})" style="background: #e74c3c; padding: 8px 15px;">
+                                <i class="fas fa-times"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                `;
+        container.innerHTML += portfolioItem;
+      }
+    });
+  }
+
+  function carbonIncreaseSupport(index) {
+    const tons = prompt(
+      "How many additional tons would you like to offset?",
+      "1"
+    );
+    if (tons && !isNaN(tons)) {
+      const additionalTons = parseFloat(tons);
+      carbonData.portfolio[index].tonsOffset += additionalTons;
+      carbonData.totalOffset += additionalTons;
+
+      carbonUpdateImpactDashboard();
+      carbonLoadPortfolio();
+      carbonSaveCarbonData();
+      carbonShowNotification(
+        `Added ${additionalTons} tons to your offset!`,
+        "success"
+      );
+    }
+  }
+
+  function carbonRemoveFromPortfolio(index) {
+    if (confirm("Remove this project from your portfolio?")) {
+      const removedTons = carbonData.portfolio[index].tonsOffset;
+      carbonData.totalOffset -= removedTons;
+      carbonData.portfolio.splice(index, 1);
+
+      carbonUpdateImpactDashboard();
+      carbonLoadPortfolio();
+      carbonSaveCarbonData();
+      carbonShowNotification("Project removed from portfolio", "info");
+    }
+  }
+
+  // Certificate functions
+  function carbonUpdateCertificateStatus() {
+    const status = document.getElementById("carbon-certificate-status");
+    if (carbonData.totalOffset >= 1) {
+      status.innerHTML = `
+                <h3>🎉 You're Carbon Neutral!</h3>
+                <p>You've offset ${carbonData.totalOffset} tons of CO₂ emissions</p>
+            `;
+
+      if (!carbonData.certificates.includes("carbon_neutral")) {
+        carbonData.certificates.push("carbon_neutral");
+        carbonShowNotification(
+          "🎊 Carbon Neutral Certificate Unlocked!",
+          "success"
+        );
+      }
+    } else {
+      status.innerHTML = `
+                <p>Complete your first offset to unlock your certificate!</p>
+                <p><small>Need ${(1 - carbonData.totalOffset).toFixed(
+                  2
+                )} more tons</small></p>
+            `;
+    }
+  }
+
+  function carbonViewCertificate() {
+    if (carbonData.totalOffset < 1) {
+      alert("Complete your first carbon offset to view your certificate!");
+      return;
+    }
+
+    const certificate = `
+CARBON NEUTRAL CERTIFICATE
+
+This certifies that
+${carbonData.totalOffset.toFixed(2)} TONS OF CO₂
+have been successfully offset through
+verified carbon reduction projects.
+
+Date: ${new Date().toLocaleDateString()}
+Certificate ID: ECO-${Date.now()}
+
+Thank you for your commitment to
+environmental sustainability.
+        `;
+    alert("CARBON NEUTRAL CERTIFICATE\n\n" + certificate);
+  }
+
+  function carbonDownloadCertificate() {
+    if (carbonData.totalOffset < 1) {
+      alert("Complete your first carbon offset to download your certificate!");
+      return;
+    }
+    carbonShowNotification("Certificate download started!", "success");
+  }
+
+  
+  function carbonUpdateImpactDashboard() {
+    document.getElementById("carbon-total-offset").textContent =
+      carbonData.totalOffset.toFixed(1);
+    document.getElementById("carbon-projects-supported").textContent =
+      carbonData.projectsSupported.length;
+    document.getElementById("carbon-neutrality").textContent =
+      Math.min(carbonData.totalOffset * 100, 100).toFixed(0) + "%";
+
+    document.getElementById("carbon-lifetime-offset").textContent =
+      carbonData.totalOffset.toFixed(1);
+    document.getElementById("carbon-equivalent-trees").textContent = Math.round(
+      carbonData.totalOffset * 50
+    ); // 50 trees per ton
+    document.getElementById("carbon-cars-removed").textContent = Math.round(
+      carbonData.totalOffset * 0.43
+    ); // 2.3 tons per car per year
+    document.getElementById("carbon-offset-streak").textContent =
+      carbonData.impact.monthsActive;
+  }
+
+  function carbonDownloadImpactReport() {
+    const report = `
+CARBON OFFSET IMPACT REPORT
+
+Total CO₂ Offset: ${carbonData.totalOffset.toFixed(2)} tons
+Projects Supported: ${carbonData.projectsSupported.length}
+Active Plan: ${carbonData.activePlan || "None"}
+Months Active: ${carbonData.impact.monthsActive}
+
+Environmental Impact:
+• Equivalent to planting ${Math.round(carbonData.totalOffset * 50)} trees
+• Equivalent to removing ${Math.round(
+      carbonData.totalOffset * 0.43
+    )} cars for a year
+• Carbon Neutrality: ${Math.min(carbonData.totalOffset * 100, 100).toFixed(0)}%
+
+Generated on: ${new Date().toLocaleDateString()}
+        `;
+    alert("Impact Report:\n\n" + report);
+  }
+
+  function carbonShareImpact() {
+    const message = `I've offset ${carbonData.totalOffset.toFixed(
+      2
+    )} tons of CO₂ through EcoAir! That's like planting ${Math.round(
+      carbonData.totalOffset * 50
+    )} trees. Join me in going carbon neutral!`;
+    alert(`Share your impact:\n\n"${message}"`);
+  }
+
+  // Utility functions
+  function carbonGetProjectImage(type) {
+    const images = {
+      forest: { icon: "tree", color: "#27ae60" },
+      solar: { icon: "solar-panel", color: "#f39c12" },
+      wind: { icon: "wind", color: "#3498db" },
+      methane: { icon: "industry", color: "#8e44ad" },
+      mangrove: { icon: "water", color: "#2980b9" },
+      cookstove: { icon: "fire", color: "#e74c3c" },
+    };
+    return images[type] || { icon: "leaf", color: "#2ecc71" };
+  }
+
+  function carbonShowVerification(type) {
+    const info = {
+      verified:
+        "Verified Carbon Standard: Globally recognized carbon offset standard",
+      gold: "Gold Standard: Premium certification for climate and development projects",
+      climate: "Climate Action Reserve: US-based carbon offset registry",
+      american:
+        "American Carbon Registry: Leading carbon offset program in Americas",
+    };
+    alert(info[type] || "Verification standard information");
+  }
+
+  function carbonSaveCarbonData() {
+    localStorage.setItem("carbonData", JSON.stringify(carbonData));
+  }
+
+  function carbonShowNotification(message, type) {
+    const notification = document.createElement("div");
+    notification.className = `carbon-notification ${type}`;
+    notification.textContent = message;
+    notification.style.background = type === "error" ? "#e74c3c" : "#2ecc71";
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,464 @@
+{% extends "base.html" %}
+
+{% block title %}Waste Management - EcoAir{% endblock %}
+
+{% block content %}
+<nav class="subnav">
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="back-btn"><i class="fas fa-arrow-left"></i> Back to EcoAir</a>
+        <div class="subnav-links">
+            <a href="{{ url_for('renewable_energy') }}">Renewable Energy</a>
+            <a href="{{ url_for('waste_management') }}" class="active">Waste Management</a>
+            <a href="{{ url_for('green_companies') }}">Green Companies</a>
+            <a href="{{ url_for('carbon_offset') }}">Carbon Offset</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <section class="waste-page-hero">
+        <div class="hero-content">
+            <h2>Smart Waste Management</h2>
+            <p>Track your waste reduction progress and learn sustainable practices</p>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number" id="waste-reduced">0%</div>
+                <div class="stat-label">Waste Reduced</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="recycling-rate">0%</div>
+                <div class="stat-label">Recycling Rate</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="compost-created">0kg</div>
+                <div class="stat-label">Compost Created</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Waste Tracking Section -->
+    <section class="waste-tracker">
+        <h2><i class="fas fa-chart-bar"></i> Weekly Waste Tracker</h2>
+        <p>Log your weekly waste production and track your reduction progress</p>
+        
+        <div class="waste-input-grid">
+            <div class="waste-input-card">
+                <i class="fas fa-trash" style="color: #4facfe; font-size: 2rem;"></i>
+                <h4>General Waste</h4>
+                <input type="number" id="general-waste" placeholder="kg" min="0" step="0.1">
+                <small>Weekly amount</small>
+            </div>
+            
+            <div class="waste-input-card">
+                <i class="fas fa-recycle" style="color: #4facfe; font-size: 2rem;"></i>
+                <h4>Recyclables</h4>
+                <input type="number" id="recyclable-waste" placeholder="kg" min="0" step="0.1">
+                <small>Weekly amount</small>
+            </div>
+            
+            <div class="waste-input-card">
+                <i class="fas fa-leaf" style="color: #4facfe; font-size: 2rem;"></i>
+                <h4>Compost</h4>
+                <input type="number" id="compost-waste" placeholder="kg" min="0" step="0.1">
+                <small>Weekly amount</small>
+            </div>
+            
+            <div class="waste-input-card">
+                <i class="fas fa-ban" style="color: #4facfe; font-size: 2rem;"></i>
+                <h4>Waste Avoided</h4>
+                <input type="number" id="avoided-waste" placeholder="kg" min="0" step="0.1">
+                <small>Weekly reduction</small>
+            </div>
+        </div>
+        
+        <div class="waste-action-buttons">
+            <button class="waste-action-btn" onclick="logWasteData()">
+                <i class="fas fa-save"></i> Log Waste Data
+            </button>
+            <button class="waste-action-btn" onclick="generateWasteReport()" style="background: #4CAF50;">
+                <i class="fas fa-chart-pie"></i> Generate Report
+            </button>
+            <button class="waste-action-btn" onclick="setWasteGoal()" style="background: #ff9800;">
+                <i class="fas fa-bullseye"></i> Set Goals
+            </button>
+        </div>
+        
+        <div id="waste-result" class="waste-result">
+            <h3>Your Waste Analysis</h3>
+            <div id="waste-analysis"></div>
+        </div>
+    </section>
+
+    <!-- Recycling Guide -->
+    <section class="waste-recycling-guide">
+        <h2><i class="fas fa-recycle"></i> Smart Recycling Guide</h2>
+        <p>Learn what can and cannot be recycled in your area</p>
+        
+        <div class="waste-guide-grid">
+            <div class="waste-guide-item">
+                <i class="fas fa-wine-bottle" style="color: #4facfe;"></i>
+                <h4>Plastic</h4>
+                <p>Bottles, containers, packaging</p>
+                <div class="waste-progress-bar">
+                    <div class="waste-progress-fill" style="width: 85%"></div>
+                </div>
+                <small>85% Recyclable</small>
+                <button class="waste-action-btn" onclick="showRecyclingTips('plastic')" style="padding: 8px 15px; margin-top: 10px;">Tips</button>
+            </div>
+            
+            <div class="waste-guide-item">
+                <i class="fas fa-newspaper" style="color: #4facfe;"></i>
+                <h4>Paper & Cardboard</h4>
+                <p>Newspapers, boxes, office paper</p>
+                <div class="waste-progress-bar">
+                    <div class="waste-progress-fill" style="width: 90%"></div>
+                </div>
+                <small>90% Recyclable</small>
+                <button class="waste-action-btn" onclick="showRecyclingTips('paper')" style="padding: 8px 15px; margin-top: 10px;">Tips</button>
+            </div>
+            
+            <div class="waste-guide-item">
+                <i class="fas fa-beer" style="color: #4facfe;"></i>
+                <h4>Glass</h4>
+                <p>Bottles, jars, containers</p>
+                <div class="waste-progress-bar">
+                    <div class="waste-progress-fill" style="width: 100%"></div>
+                </div>
+                <small>100% Recyclable</small>
+                <button class="waste-action-btn" onclick="showRecyclingTips('glass')" style="padding: 8px 15px; margin-top: 10px;">Tips</button>
+            </div>
+            
+            <div class="waste-guide-item">
+                <i class="fas fa-utensils" style="color: #4facfe;"></i>
+                <h4>Metal</h4>
+                <p>Cans, foil, containers</p>
+                <div class="waste-progress-bar">
+                    <div class="waste-progress-fill" style="width: 95%"></div>
+                </div>
+                <small>95% Recyclable</small>
+                <button class="waste-action-btn" onclick="showRecyclingTips('metal')" style="padding: 8px 15px; margin-top: 10px;">Tips</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Composting Section -->
+    <section class="waste-composting-section">
+        <h2><i class="fas fa-seedling"></i> Home Composting Guide</h2>
+        <p>Turn your kitchen waste into nutrient-rich compost</p>
+        
+        <div class="waste-compost-steps">
+            <div class="waste-step">
+                <div class="waste-step-number">1</div>
+                <h4>Collect Materials</h4>
+                <p>Kitchen scraps, yard waste</p>
+                <button class="waste-action-btn" onclick="startComposting()" style="padding: 8px 15px; margin-top: 10px;">Start</button>
+            </div>
+            <div class="waste-step">
+                <div class="waste-step-number">2</div>
+                <h4>Layer Properly</h4>
+                <p>Green and brown materials</p>
+                <button class="waste-action-btn" onclick="showLayeringGuide()" style="padding: 8px 15px; margin-top: 10px;">Guide</button>
+            </div>
+            <div class="waste-step">
+                <div class="waste-step-number">3</div>
+                <h4>Maintain</h4>
+                <p>Turn and water regularly</p>
+                <button class="waste-action-btn" onclick="setMaintenanceReminder()" style="padding: 8px 15px; margin-top: 10px;">Remind Me</button>
+            </div>
+            <div class="waste-step">
+                <div class="waste-step-number">4</div>
+                <h4>Harvest</h4>
+                <p>Use in 2-6 months</p>
+                <button class="waste-action-btn" onclick="logCompostHarvest()" style="padding: 8px 15px; margin-top: 10px;">Harvest</button>
+            </div>
+        </div>
+        
+        <div class="waste-action-buttons">
+            <button class="waste-action-btn" onclick="downloadCompostGuide()">
+                <i class="fas fa-download"></i> Download Guide
+            </button>
+            <button class="waste-action-btn" onclick="joinCompostCommunity()" style="background: #4CAF50;">
+                <i class="fas fa-users"></i> Join Community
+            </button>
+        </div>
+    </section>
+
+    <!-- Collection Schedule -->
+    <section class="waste-collection-schedule">
+        <h2><i class="fas fa-calendar-alt"></i> Waste Collection Schedule</h2>
+        <p>Find your local waste collection days and guidelines</p>
+        
+        <div class="waste-schedule-grid">
+            <div class="waste-schedule-card">
+                <h4><i class="fas fa-trash" style="color: #e74c3c;"></i> General Waste</h4>
+                <p><strong>Collection:</strong> Every Wednesday</p>
+                <p><strong>Guidelines:</strong> Bagged and sealed</p>
+                <button class="waste-action-btn" onclick="setCollectionReminder('general')" style="padding: 8px 15px;">Set Reminder</button>
+            </div>
+            
+            <div class="waste-schedule-card">
+                <h4><i class="fas fa-recycle" style="color: #2ecc71;"></i> Recycling</h4>
+                <p><strong>Collection:</strong> Every Friday</p>
+                <p><strong>Guidelines:</strong> Clean and sorted</p>
+                <button class="waste-action-btn" onclick="setCollectionReminder('recycling')" style="padding: 8px 15px;">Set Reminder</button>
+            </div>
+            
+            <div class="waste-schedule-card">
+                <h4><i class="fas fa-leaf" style="color: #8e44ad;"></i> Compost</h4>
+                <p><strong>Collection:</strong> Every Tuesday</p>
+                <p><strong>Guidelines:</strong> No plastic bags</p>
+                <button class="waste-action-btn" onclick="setCollectionReminder('compost')" style="padding: 8px 15px;">Set Reminder</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Impact -->
+    <section>
+        <h2><i class="fas fa-chart-line"></i> Community Waste Reduction</h2>
+        <div class="waste-stats">
+            <div class="waste-stat">
+                <i class="fas fa-recycle" style="color: #4facfe; font-size: 2rem;"></i>
+                <h3 id="community-recycling">1,247</h3>
+                <p>Active Recyclers</p>
+            </div>
+            <div class="waste-stat">
+                <i class="fas fa-leaf" style="color: #4facfe; font-size: 2rem;"></i>
+                <h3 id="community-compost">589</h3>
+                <p>Composters</p>
+            </div>
+            <div class="waste-stat">
+                <i class="fas fa-weight" style="color: #4facfe; font-size: 2rem;"></i>
+                <h3 id="community-waste">45.2T</h3>
+                <p>Waste Reduced</p>
+            </div>
+        </div>
+        
+        <div class="waste-action-buttons">
+            <button class="waste-action-btn" onclick="shareWasteAchievement()" style="background: #3498db;">
+                <i class="fas fa-share"></i> Share Progress
+            </button>
+            <button class="waste-action-btn" onclick="joinWasteChallenge()" style="background: #9b59b6;">
+                <i class="fas fa-trophy"></i> Join Challenge
+            </button>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+
+
+
+   {% block extra_js %}
+<script>
+    // Waste management data
+    let wasteData = JSON.parse(localStorage.getItem('wasteData')) || {
+        weeklyWaste: 0,
+        recyclingRate: 0,
+        compostCreated: 0,
+        wasteReduced: 0,
+        goals: {},
+        achievements: []
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateWasteStats();
+        loadWasteHistory();
+        updateCommunityStats();
+    });
+
+    // Waste tracking functions
+    function logWasteData() {
+        const general = parseFloat(document.getElementById('general-waste').value) || 0;
+        const recyclable = parseFloat(document.getElementById('recyclable-waste').value) || 0;
+        const compost = parseFloat(document.getElementById('compost-waste').value) || 0;
+        const avoided = parseFloat(document.getElementById('avoided-waste').value) || 0;
+        
+        if (general === 0 && recyclable === 0 && compost === 0) {
+            alert('Please enter at least some waste data');
+            return;
+        }
+        
+        const totalWaste = general + recyclable + compost;
+        const recyclingRate = totalWaste > 0 ? (recyclable / totalWaste) * 100 : 0;
+        const wasteReduction = ((avoided / (totalWaste + avoided)) * 100) || 0;
+        
+
+        wasteData.weeklyWaste = totalWaste;
+        wasteData.recyclingRate = recyclingRate;
+        wasteData.compostCreated += compost;
+        wasteData.wasteReduced += avoided;
+        
+        updateWasteStats();
+        
+        document.getElementById('waste-analysis').innerHTML = `
+            <p><strong>Total Waste:</strong> ${totalWaste.toFixed(1)} kg/week</p>
+            <p><strong>Recycling Rate:</strong> ${recyclingRate.toFixed(1)}%</p>
+            <p><strong>Waste Reduction:</strong> ${wasteReduction.toFixed(1)}%</p>
+            <p><strong>Total Compost:</strong> ${wasteData.compostCreated.toFixed(1)} kg</p>
+        `;
+        
+        document.getElementById('waste-result').style.display = 'block';
+        
+        checkWasteAchievements(recyclingRate, wasteReduction);
+        saveWasteData();
+        showNotification('Waste data logged successfully!', 'success');
+    }
+
+    function generateWasteReport() {
+        const report = `
+            Waste Management Report:
+            - Weekly Waste: ${wasteData.weeklyWaste.toFixed(1)} kg
+            - Recycling Rate: ${wasteData.recyclingRate.toFixed(1)}%
+            - Compost Created: ${wasteData.compostCreated.toFixed(1)} kg
+            - Total Waste Reduced: ${wasteData.wasteReduced.toFixed(1)} kg
+        `;
+        alert('Report generated! Copy this data:\n\n' + report);
+    }
+
+    function setWasteGoal() {
+        const goalType = prompt('Set goal for: (recycling/reduction/compost)');
+        const target = prompt('Enter target value:');
+        
+        if (goalType && target) {
+            wasteData.goals[goalType] = parseFloat(target);
+            showNotification(`${goalType} goal set to ${target}`, 'success');
+            saveWasteData();
+        }
+    }
+
+    // Recycling guide functions
+    function showRecyclingTips(material) {
+        const tips = {
+            plastic: 'Rinse containers, remove lids, check local codes',
+            paper: 'Keep dry, remove plastic windows, flatten boxes',
+            glass: 'Rinse thoroughly, remove caps, no broken glass',
+            metal: 'Rinse cans, flatten if possible, separate types'
+        };
+        alert(`Recycling Tips for ${material.toUpperCase()}:\n\n${tips[material]}`);
+    }
+
+    // Composting functions
+    function startComposting() {
+        wasteData.achievements.push('composting_started');
+        showNotification('Composting journey started! Track your progress.', 'success');
+        saveWasteData();
+    }
+
+    function showLayeringGuide() {
+        alert('Compost Layering Guide:\n\n• Brown materials: leaves, paper, cardboard\n• Green materials: food scraps, grass\n• Layer 2:1 brown to green\n• Keep moist but not wet');
+    }
+
+    function setMaintenanceReminder() {
+        const days = prompt('Set maintenance reminder every how many days?', '7');
+        if (days) {
+            showNotification(`Compost maintenance reminder set for every ${days} days`, 'success');
+        }
+    }
+
+    function logCompostHarvest() {
+        const amount = prompt('How much compost did you harvest? (kg)');
+        if (amount) {
+            wasteData.compostCreated += parseFloat(amount);
+            updateWasteStats();
+            showNotification(`Harvested ${amount}kg of compost!`, 'success');
+            saveWasteData();
+        }
+    }
+
+    function downloadCompostGuide() {
+        alert('Downloading comprehensive composting guide...');
+    }
+
+    function joinCompostCommunity() {
+        wasteData.achievements.push('community_joined');
+        showNotification('Welcome to the Composting Community!', 'success');
+        saveWasteData();
+    }
+
+    // Collection schedule functions
+    function setCollectionReminder(type) {
+        const types = {
+            general: 'General Waste',
+            recycling: 'Recycling',
+            compost: 'Compost'
+        };
+        showNotification(`Reminder set for ${types[type]} collection!`, 'success');
+    }
+
+    // Community functions
+    function shareWasteAchievement() {
+        const achievement = `I reduced my waste by ${wasteData.wasteReduced.toFixed(1)}kg and achieved ${wasteData.recyclingRate.toFixed(1)}% recycling rate with EcoAir!`;
+        alert(`Share your achievement:\n\n"${achievement}"`);
+    }
+
+    function joinWasteChallenge() {
+        wasteData.achievements.push('challenge_joined');
+        showNotification('Joined the 30-Day Waste Reduction Challenge!', 'success');
+        saveWasteData();
+    }
+
+    function showResource(resource) {
+        const resources = {
+            'recycling-guide': 'Download our complete recycling guide',
+            'composting': 'Get the composting handbook',
+            'waste-reduction': 'Learn waste reduction strategies',
+            'local-facilities': 'Find recycling centers near you'
+        };
+        alert(resources[resource]);
+    }
+
+    // Utility functions
+    function updateWasteStats() {
+        document.getElementById('waste-reduced').textContent = 
+            wasteData.weeklyWaste > 0 ? ((wasteData.wasteReduced / (wasteData.weeklyWaste + wasteData.wasteReduced)) * 100).toFixed(1) + '%' : '0%';
+        document.getElementById('recycling-rate').textContent = wasteData.recyclingRate.toFixed(1) + '%';
+        document.getElementById('compost-created').textContent = wasteData.compostCreated.toFixed(1) + 'kg';
+    }
+
+    function loadWasteHistory() {
+        console.log('Waste history loaded');
+    }
+
+    function updateCommunityStats() {
+        document.getElementById('community-recycling').textContent = 
+            (1247 + Math.floor(Math.random() * 50)).toLocaleString();
+        document.getElementById('community-compost').textContent = 
+            (589 + Math.floor(Math.random() * 30)).toLocaleString();
+        document.getElementById('community-waste').textContent = 
+            (45.2 + Math.random()).toFixed(1) + 'T';
+    }
+
+    function checkWasteAchievements(recyclingRate, reduction) {
+        const achievements = [];
+        
+        if (recyclingRate >= 50) achievements.push('good_recycler');
+        if (recyclingRate >= 80) achievements.push('excellent_recycler');
+        if (reduction >= 25) achievements.push('waste_reducer');
+        if (wasteData.compostCreated >= 10) achievements.push('composter');
+        
+        achievements.forEach(achievement => {
+            if (!wasteData.achievements.includes(achievement)) {
+                wasteData.achievements.push(achievement);
+                showNotification(`Achievement unlocked: ${achievement.replace('_', ' ').toUpperCase()}!`, 'success');
+            }
+        });
+    }
+
+    function saveWasteData() {
+        localStorage.setItem('wasteData', JSON.stringify(wasteData));
+    }
+
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        notification.style.background = type === 'error' ? '#e74c3c' : '#2ecc71';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+</script>
+{% endblock %}

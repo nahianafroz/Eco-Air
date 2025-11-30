@@ -1,0 +1,2059 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f9fc;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Header Styles */
+header {
+    background: linear-gradient(135deg, #2ecc71, #1abc9c);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+}
+
+.logo p {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.login-header-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.login-header-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+}
+
+#logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 5px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#logout-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #7f8c8d;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: #e74c3c;
+}
+
+/* ========================================
+           Login System Styles 
+   ========================================*/
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.login-drop {
+    width: 350px;
+    height: 350px;
+    box-shadow: inset 20px 20px 20px rgba(46, 204, 113, 0.08), 
+                25px 35px 20px rgba(46, 204, 113, 0.1), 
+                25px 30px 30px rgba(46, 204, 113, 0.08),
+                inset -20px -20px 25px rgba(255, 255, 255, 0.9);
+    position: relative;
+    border-radius: 62% 38% 24% 76% / 59% 60% 40% 41%;
+    transition: 0.5s ease;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #e8f8ef 0%, #d4f0e4 100%);
+}
+
+.login-drop:hover {
+    border-radius: 50%;
+}
+
+.login-drop::before {
+    content: '';
+    position: absolute;
+    top: 50px;
+    left: 85px;
+    width: 35px;
+    height: 35px;
+    background-color: #fff;
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+.login-drop::after {
+    content: '';
+    position: absolute;
+    top: 85px;
+    left: 110px;
+    width: 15px;
+    height: 15px;
+    background-color: #fff;
+    border-radius: 50%;
+    opacity: 0.9; 
+}
+
+.login-content {
+    text-align: center;
+    z-index: 2;
+    position: relative;
+}
+
+.login-content h2 {
+    font-size: 26px;
+    color: #27ae60;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+#login-form, #signup-form, #forgot-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login-input-box {
+    width: 225px;
+    margin-bottom: 20px;
+    position: relative;
+    border-radius: 25px;
+    box-shadow: inset 2px 5px 10px rgba(46, 204, 113, 0.1), 
+                inset -2px -5px 10px rgba(255, 255, 255, 1), 
+                15px 15px 10px rgba(46, 204, 113, 0.08),
+                15px 10px 15px rgba(46, 204, 113, 0.05);
+    background: linear-gradient(145deg, #e8f8ef, #d4f0e4);
+}
+
+.login-input-box::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 65%;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+}
+
+.login-input-box input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 100%;
+    font-size: 16px;
+    padding: 10px 35px;
+    color: #27ae60;
+}
+
+.login-input-box input::placeholder {
+    color: #95d5b2;
+}
+
+.login-input-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #27ae60;
+}
+
+.login-input-box input[type="submit"] {
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 500;
+    background: transparent;
+}
+
+.login-input-box:last-child {
+    width: 120px;
+    background: linear-gradient(145deg, #27ae60, #219653);
+    box-shadow: inset 10px 10px 10px rgba(39, 174, 96, 0.15),
+                15px 25px 10px rgba(39, 174, 96, 0.12),
+                15px 20px 20px rgba(39, 174, 96, 0.1),
+                inset -10px -10px 15px rgba(255, 255, 255, 0.5);
+    transition: 0.5s;
+}
+
+.login-input-box:last-child:hover {
+    width: 150px;
+    background: linear-gradient(145deg, #2ecc71, #27ae60);
+}
+
+.login-btn-con {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.login-btn {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    background: linear-gradient(145deg, #27ae60, #219653);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    font-size: 14px;
+    text-align: center;
+    transition: 0.25s;
+    border-radius: 44% 56% 65% 35% / 57% 58% 42% 43%;
+    box-shadow: inset 10px 10px 10px rgba(39, 174, 96, 0.15),
+                15px 25px 10px rgba(39, 174, 96, 0.12),
+                15px 20px 20px rgba(39, 174, 96, 0.1),
+                inset -10px -10px 15px rgba(255, 255, 255, 0.5);
+}
+
+.login-btn::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 30px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.6);
+    opacity: 0.45;
+}
+
+.forget-btn {
+    width: 140px;
+    height: 80px;
+    font-size: 12px;
+}
+
+
+#forgot-modal .modal-content {
+    max-width: 500px;
+}
+
+#forgot-form .login-input-box:last-child {
+    width: 200px !important;
+    margin-top: 10px;
+}
+
+#forgot-form .login-input-box:last-child input[type="submit"] {
+    font-size: 14px;
+    padding: 12px 15px;
+    letter-spacing: 0.8px;
+}
+
+
+#login-modal .modal-content {
+    max-width: 500px;
+}
+
+#login-modal .login-drop {
+    width: 380px;
+    height: 380px;
+}
+
+
+#signup-modal .login-drop {
+    width: 450px !important;
+    height: 550px !important;
+    box-shadow: inset 20px 20px 20px rgba(46, 204, 113, 0.08), 
+                25px 35px 20px rgba(46, 204, 113, 0.1), 
+                25px 30px 30px rgba(46, 204, 113, 0.08),
+                inset -20px -20px 25px rgba(255, 255, 255, 0.9) !important;
+    position: relative !important;
+    border-radius: 52% 48% 34% 66% / 59% 60% 40% 41% !important;
+    transition: 0.5s ease !important;
+    overflow: hidden !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background: linear-gradient(135deg, #e8f8ef 0%, #d4f0e4 100%) !important;
+    padding: 25px !important;
+}
+
+#signup-modal .login-drop:hover {
+    border-radius: 50% !important;
+}
+
+#signup-modal .login-drop::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 60px !important;
+    left: 100px !important;
+    width: 45px !important;
+    height: 45px !important;
+    background-color: #fff !important;
+    border-radius: 50% !important;
+    opacity: 0.9 !important;
+    z-index: 1 !important;
+}
+
+#signup-modal .login-drop::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 100px !important;
+    left: 140px !important;
+    width: 25px !important;
+    height: 25px !important;
+    background-color: #fff !important;
+    border-radius: 50% !important;
+    opacity: 0.9 !important;
+    z-index: 1 !important;
+}
+
+
+#signup-modal .login-content {
+    text-align: center !important;
+    z-index: 2 !important;
+    position: relative !important;
+    width: 100% !important;
+    padding: 10px !important;
+}
+
+#signup-modal .login-content h2 {
+    font-size: 28px !important;
+    color: #27ae60 !important;
+    margin-bottom: 30px !important;
+    font-weight: 600 !important;
+    z-index: 3 !important;
+    position: relative !important;
+}
+
+
+#signup-form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+    align-items: center !important;
+    width: 100% !important;
+    z-index: 3 !important;
+    position: relative !important;
+}
+
+#signup-form .login-input-box {
+    width: 320px !important;
+    margin-bottom: 0 !important;
+    z-index: 3 !important;
+    position: relative !important;
+}
+
+
+#signup-form .login-input-box:last-child {
+    width: 150px !important;
+    margin-top: 15px !important;
+    background: linear-gradient(145deg, #27ae60, #219653) !important;
+    box-shadow: inset 10px 10px 10px rgba(39, 174, 96, 0.15),
+                15px 25px 10px rgba(39, 174, 96, 0.12),
+                15px 20px 20px rgba(39, 174, 96, 0.1),
+                inset -10px -10px 15px rgba(255, 255, 255, 0.5) !important;
+}
+
+#signup-form .login-input-box:last-child:hover {
+    width: 170px !important;
+    background: linear-gradient(145deg, #2ecc71, #27ae60) !important;
+}
+
+#signup-form .login-input-box:last-child input[type="submit"] {
+    color: #fff !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    padding: 12px 5px !important;
+}
+
+
+#signup-modal .login-btn-con {
+    margin-top: 25px !important;
+    z-index: 3 !important;
+    position: relative !important;
+}
+
+#signup-modal .signin-btn {
+    width: 280px !important;
+    height: 70px !important;
+    font-size: 15px !important;
+    border-radius: 45% 55% 55% 45% / 50% 50% 50% 50% !important;
+    z-index: 3 !important;
+    position: relative !important;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f9fc;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+header {
+    background: linear-gradient(135deg, #2ecc71, #1abc9c);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+main {
+    padding: 2rem 0;
+}
+
+section {
+    margin-bottom: 3rem;
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+/* Rewards Section */
+.rewards-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.points-card {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(243, 156, 18, 0.3);
+}
+
+.points-value {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.rewards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.reward-item {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.reward-item:hover {
+    border-color: #2ecc71;
+    transform: translateY(-5px);
+}
+
+.reward-item i {
+    font-size: 2.5rem;
+    color: #2ecc71;
+    margin-bottom: 1rem;
+}
+
+.redeem-btn {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.3s;
+}
+
+.redeem-btn:hover {
+    background: #27ae60;
+}
+
+.redeem-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+/* Search Section */
+.search-container {
+    display: flex;
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#city-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+#city-input:focus {
+    border-color: #2ecc71;
+    outline: none;
+}
+
+#search-btn {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#search-btn:hover {
+    background: #27ae60;
+}
+
+/* AQI Dashboard */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.aqi-main {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.aqi-value {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.aqi-status {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding: 5px 15px;
+    border-radius: 20px;
+    color: white;
+}
+
+.city-name {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+}
+
+.pollutants-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.pollutant-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.pollutant-card:hover {
+    transform: translateY(-5px);
+}
+
+.pollutant-card h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.pollutant-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.pollutant-status {
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+/* Pollution Tips */
+.tips-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.tip-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border-left: 4px solid #2ecc71;
+}
+
+.tip-card h3 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+/* Impact Section */
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.impact-card {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    border: 2px solid #e9ecef;
+}
+
+.impact-card i {
+    font-size: 3rem;
+    color: #2ecc71;
+    margin-bottom: 1rem;
+}
+
+.impact-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.impact-label {
+    color: #7f8c8d;
+    font-size: 1rem;
+}
+
+/* Tree Tracker */
+.tracker-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.tree-counter {
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.tree-count {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #2ecc71;
+    margin: 1rem 0;
+}
+
+.impact-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #7f8c8d;
+}
+
+.eco-actions {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.action-form {
+    max-width: 500px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-group small {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+}
+
+.transport-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 0.5rem;
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.option-label:hover {
+    border-color: #2ecc71;
+}
+
+.option-label input[type="radio"] {
+    margin-right: 8px;
+}
+
+.option-label i {
+    margin-right: 8px;
+    color: #2ecc71;
+}
+
+.option-label input[type="radio"]:checked + i + span {
+    font-weight: bold;
+    color: #2ecc71;
+}
+
+#log-action-btn {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 15px 25px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+#log-action-btn:hover {
+    background: #27ae60;
+}
+
+.eco-badges {
+    grid-column: 1 / -1;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.badges-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    opacity: 0.3;
+    transition: all 0.3s ease;
+}
+
+.badge.unlocked {
+    opacity: 1;
+    border-left: 4px solid #2ecc71;
+}
+
+.badge i {
+    font-size: 2rem;
+    margin-right: 1rem;
+    color: #2ecc71;
+}
+
+.badge-info {
+    flex: 1;
+}
+
+.badge-name {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.badge-desc {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+.badge-progress {
+    height: 4px;
+    background: #ecf0f1;
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #2ecc71;
+    transition: width 0.3s ease;
+}
+
+/* Future Steps */
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.step-card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid #e9ecef;
+    transition: transform 0.3s;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+    border-color: #2ecc71;
+}
+
+.step-card i {
+    font-size: 2.5rem;
+    color: #2ecc71;
+    margin-bottom: 1rem;
+}
+
+.step-card h4 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+/* Chart Container */
+.chart-container {
+    height: 300px;
+    margin-top: 1rem;
+}
+
+/* Footer */
+footer {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-top: 2rem;
+}
+
+/* AQI Status  */
+.aqi-good {
+    background-color: #2ecc71;
+}
+
+.aqi-moderate {
+    background-color: #f1c40f;
+}
+
+.aqi-unhealthy {
+    background-color: #e67e22;
+}
+
+.aqi-hazardous {
+    background-color: #e74c3c;
+}
+
+/* Notification */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #2ecc71;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@media (max-width: 768px) {
+    .rewards-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .pollutants-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tracker-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .impact-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .transport-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .search-container {
+        flex-direction: column;
+    }
+}
+
+
+.step-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+    border-color: #2ecc71;
+    text-decoration: none;
+    color: inherit;
+}
+
+.click-here {
+    color: #2ecc71;
+    font-weight: bold;
+    margin-top: 1rem;
+    display: block;
+}
+
+.subnav {
+    background: #f8f9fa;
+    padding: 1rem 0;
+    border-bottom: 2px solid #e9ecef;
+     margin-bottom: 2rem;
+
+}
+
+.subnav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.subnav-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.subnav-links a {
+    text-decoration: none;
+    color: #7f8c8d;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.subnav-links a.active,
+.subnav-links a:hover {
+    background: #2ecc71;
+    color: white;
+}
+
+.back-btn {
+    text-decoration: none;
+    color: #2ecc71;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+footer {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: white;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 2rem;
+    padding: 3rem 0 2rem;
+}
+
+.footer-section h3 {
+    color: #2ecc71;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.footer-section h4 {
+    color: #ecf0f1;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+    color: #2ecc71;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.social-links a:hover {
+    background: #2ecc71;
+    transform: translateY(-3px);
+}
+
+.contact-info p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #bdc3c7;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 0;
+}
+
+.footer-bottom-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-bottom-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-bottom-links a {
+    color: #bdc3c7;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.footer-bottom-links a:hover {
+    color: #2ecc71;
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .footer-bottom-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .footer-bottom-links {
+        justify-content: center;
+    }
+    
+    .login-drop {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .login-btn-con {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .login-btn {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .forget-btn {
+        width: 120px;
+        height: 70px;
+    }
+}
+
+
+/* ========================================
+   RENEWABLE ENERGY PAGE STYLES
+   ======================================== */
+
+.renew-page-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+    border-radius: 15px;
+    margin-bottom: 3rem;
+}
+
+.renew-hero-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.renew-hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.renew-stat {
+    text-align: center;
+}
+
+.renew-stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.renew-calculator {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 3rem 0;
+}
+
+.renew-calculator input, 
+.renew-calculator select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.renew-calculator button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    margin: 10px 5px;
+}
+
+.renew-result {
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    display: none;
+}
+
+.renew-provider-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.renew-provider-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.renew-progress-tracker {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+}
+
+.renew-progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 0;
+}
+
+.renew-step {
+    text-align: center;
+    flex: 1;
+    padding: 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.renew-step-number {
+    background: #667eea;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-weight: bold;
+}
+
+
+.renew-step.active .renew-step-number {
+    background: #4CAF50;
+     transform: scale(1.1);
+}
+
+.renew-action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.renew-step h4 {
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.renew-step.active h4 {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.renew-action-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.renew-action-btn:hover {
+    background: #5a6fd8;
+}
+
+/* ========================================
+   WASTE MANAGEMENT PAGE STYLES
+   ======================================== */
+
+.waste-page-hero {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+    border-radius: 15px;
+    margin-bottom: 3rem;
+}
+
+.waste-tracker {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 3rem 0;
+}
+
+.waste-input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.waste-input-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.waste-input-card input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+}
+
+.waste-recycling-guide {
+    margin: 3rem 0;
+}
+
+.waste-guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.waste-guide-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.waste-guide-item i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.waste-composting-section {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 3rem 0;
+}
+
+.waste-compost-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.waste-step {
+    text-align: center;
+    flex: 1;
+    padding: 1rem;
+    min-width: 150px;
+}
+
+.waste-step-number {
+    background: #4facfe;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-weight: bold;
+}
+
+.waste-collection-schedule {
+    margin: 3rem 0;
+}
+
+.waste-schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.waste-schedule-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.waste-action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.waste-action-btn {
+    background: #4facfe;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.waste-action-btn:hover {
+    background: #3a9df5;
+}
+
+.waste-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.waste-stat {
+    text-align: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.waste-progress-bar {
+    height: 8px;
+    background: #ecf0f1;
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.waste-progress-fill {
+    height: 100%;
+    background: #4facfe;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.waste-result {
+    display: none;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+}
+
+/*  ========================================
+        GREEN COMPANIES PAGE STYLES 
+     ========================================*/
+.green-page-hero {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    color: #2c3e50;
+    padding: 4rem 0;
+    text-align: center;
+    border-radius: 15px;
+    margin-bottom: 3rem;
+}
+
+.green-company-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.green-company-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.green-company-card:hover {
+    transform: translateY(-5px);
+}
+
+.green-company-logo {
+    width: 80px;
+    height: 80px;
+    background: #a8edea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 2rem;
+    color: #2c3e50;
+}
+
+.green-rating {
+    color: #ffd700;
+    margin: 1rem 0;
+}
+
+.green-certification-badges {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.green-badge {
+    background: #a8edea;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.green-impact-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.green-metric {
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.green-search-filter {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+}
+
+.green-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.green-filter-group {
+    margin-bottom: 1rem;
+}
+
+.green-wishlist-section {
+    margin: 3rem 0;
+}
+
+.green-wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.green-action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.green-action-btn {
+    background: #a8edea;
+    color: #2c3e50;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.green-action-btn:hover {
+    background: #92e0dd;
+}
+
+.green-comparison-table {
+    overflow-x: auto;
+    margin: 2rem 0;
+}
+
+.green-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.green-table th, .green-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.green-table th {
+    background: #a8edea;
+    font-weight: bold;
+}
+
+.green-hero-content {
+    margin-bottom: 2rem;
+}
+
+.green-hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.green-stat {
+    text-align: center;
+}
+
+.green-stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.green-stat-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.green-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/*  ======================================== 
+       CARBON OFFSET PAGE STYLES 
+    ========================================*/
+.carbon-page-hero {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+    color: #2c3e50;
+    padding: 4rem 0;
+    text-align: center;
+    border-radius: 15px;
+    margin-bottom: 3rem;
+}
+
+.carbon-carbon-calculator {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 3rem 0;
+}
+
+.carbon-calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.carbon-calc-input {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.carbon-calc-input input,
+.carbon-calc-input select {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+}
+
+
+.carbon-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.carbon-project-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.carbon-project-card:hover {
+    transform: translateY(-5px);
+}
+
+.carbon-project-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+}
+
+.carbon-progress-bar {
+    height: 8px;
+    background: #ecf0f1;
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.carbon-progress-fill {
+    height: 100%;
+    background: #ff9a9e;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.carbon-impact-dashboard {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 3rem 0;
+}
+
+.carbon-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.carbon-dashboard-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.carbon-portfolio-section {
+    margin: 3rem 0;
+}
+
+.carbon-portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.carbon-portfolio-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.carbon-action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.carbon-action-btn {
+    background: #ff9a9e;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.carbon-action-btn:hover {
+    background: #ff7b81;
+}
+
+.carbon-certificate-section {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+    padding: 3rem;
+    border-radius: 12px;
+    margin: 3rem 0;
+    text-align: center;
+    color: white;
+}
+
+.carbon-investment-plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.carbon-plan-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.carbon-plan-features {
+    text-align: left;
+    margin: 1rem 0;
+}
+
+.carbon-plan-features li {
+    margin: 0.5rem 0;
+}
+
+
+.carbon-hero-content h2 {
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+}
+
+.carbon-hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.carbon-stat {
+    text-align: center;
+}
+
+.carbon-stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.carbon-stat-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-top: 0.5rem;
+}
+
+.carbon-certification-badges {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.carbon-badge {
+    background: #ecf0f1;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #2c3e50;
+}
+
+.carbon-price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff9a9e;
+    margin: 1rem 0;
+}
+
+/* Notification styles */
+.carbon-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}

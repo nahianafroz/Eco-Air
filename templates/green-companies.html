@@ -1,0 +1,530 @@
+{% extends "base.html" %}
+
+{% block title %}Green Companies - EcoAir{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/green-companies.css') }}">
+{% endblock %}
+
+{% block content %}
+
+   <nav class="subnav">
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="back-btn"><i class="fas fa-arrow-left"></i> Back to EcoAir</a>
+        <div class="subnav-links">
+            <a href="{{ url_for('renewable_energy') }}">Renewable Energy</a>
+            <a href="{{ url_for('waste_management') }}">Waste Management</a>
+            <a href="{{ url_for('green_companies') }}" class="active">Green Companies</a>
+            <a href="{{ url_for('carbon_offset') }}">Carbon Offset</a>
+        </div>
+    </div>
+</nav>
+
+    <main class="container">
+        <section class="green-page-hero">
+            <div class="green-hero-content">
+                <h2>Conscious Consumerism</h2>
+                <p>Your purchasing decisions can drive positive environmental change</p>
+            </div>
+            <div class="green-hero-stats">
+                <div class="green-stat">
+                    <div class="green-stat-number" id="companies-supported">0</div>
+                    <div class="green-stat-label">Companies Supported</div>
+                </div>
+                <div class="green-stat">
+                    <div class="green-stat-number" id="eco-impact">$0</div>
+                    <div class="green-stat-label">Eco Impact Value</div>
+                </div>
+                <div class="green-stat">
+                    <div class="green-stat-number" id="green-score">0%</div>
+                    <div class="green-stat-label">Green Shopping Score</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search and Filter Section -->
+        <section class="green-search-filter">
+            <h2><i class="fas fa-search"></i> Find Green Companies</h2>
+            <div class="green-filter-grid">
+                <div class="green-filter-group">
+                    <input type="text" id="company-search" placeholder="Search companies..." style="width: 100%; padding: 10px; border: 2px solid #a8edea; border-radius: 8px;">
+                </div>
+                <div class="green-filter-group">
+                    <select id="industry-filter" style="width: 100%; padding: 10px; border: 2px solid #a8edea; border-radius: 8px;">
+                        <option value="">All Industries</option>
+                        <option value="food">Food & Beverage</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="tech">Technology</option>
+                        <option value="home">Home Goods</option>
+                        <option value="beauty">Beauty & Personal Care</option>
+                    </select>
+                </div>
+                <div class="green-filter-group">
+                    <select id="certification-filter" style="width: 100%; padding: 10px; border: 2px solid #a8edea; border-radius: 8px;">
+                        <option value="">All Certifications</option>
+                        <option value="bcorp">B Corp</option>
+                        <option value="organic">Organic</option>
+                        <option value="fairtrade">Fair Trade</option>
+                        <option value="carbon-neutral">Carbon Neutral</option>
+                    </select>
+                </div>
+            </div>
+            <div class="green-action-buttons">
+                <button class="green-action-btn" onclick="searchCompanies()" style="background: #a8edea;">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <button class="green-action-btn" onclick="clearFilters()">
+                    <i class="fas fa-times"></i> Clear Filters
+                </button>
+            </div>
+        </section>
+
+        <!-- Featured Companies -->
+        <section>
+            <h2><i class="fas fa-star"></i> Featured Green Companies</h2>
+            <div class="green-company-grid" id="companies-container">
+            </div>
+        </section>
+
+        <!-- Company Comparison -->
+        <section>
+            <h2><i class="fas fa-balance-scale"></i> Company Comparison</h2>
+            <div class="green-comparison-table">
+                <table class="green-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>Green Score</th>
+                            <th>Certifications</th>
+                            <th>Carbon Footprint</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparison-table">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Green Wishlist -->
+        <section class="green-wishlist-section">
+            <h2><i class="fas fa-heart"></i> Your Green Wishlist</h2>
+            <p>Save companies you want to support and track your impact</p>
+            
+            <div class="green-wishlist-grid" id="wishlist-container">
+            </div>
+            
+            <div class="green-action-buttons">
+                <button class="green-action-btn" onclick="shareWishlist()" style="background: #4CAF50;">
+                    <i class="fas fa-share"></i> Share Wishlist
+                </button>
+                <button class="green-action-btn" onclick="exportWishlist()">
+                    <i class="fas fa-download"></i> Export List
+                </button>
+            </div>
+        </section>
+
+        <!-- Impact Tracking -->
+        <section>
+            <h2><i class="fas fa-chart-line"></i> Your Green Shopping Impact</h2>
+            <div class="green-impact-metrics">
+                <div class="green-metric">
+                    <i class="fas fa-shopping-bag" style="font-size: 2rem; color: #a8edea;"></i>
+                    <h3 id="green-purchases">0</h3>
+                    <p>Green Purchases</p>
+                </div>
+                <div class="green-metric">
+                    <i class="fas fa-tree" style="font-size: 2rem; color: #a8edea;"></i>
+                    <h3 id="co2-saved">0</h3>
+                    <p>CO₂ Saved (kg)</p>
+                </div>
+                <div class="green-metric">
+                    <i class="fas fa-hand-holding-water" style="font-size: 2rem; color: #a8edea;"></i>
+                    <h3 id="water-saved">0</h3>
+                    <p>Water Saved (L)</p>
+                </div>
+                <div class="green-metric">
+                    <i class="fas fa-recycle" style="font-size: 2rem; color: #a8edea;"></i>
+                    <h3 id="waste-reduced">0</h3>
+                    <p>Waste Reduced (kg)</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Green companies data
+        let greenCompaniesData = JSON.parse(localStorage.getItem('greenCompaniesData')) || {
+            wishlist: [],
+            purchases: [],
+            impact: {
+                co2Saved: 0,
+                waterSaved: 0,
+                wasteReduced: 0,
+                companiesSupported: 0
+            },
+            preferences: {}
+        };
+
+        // companies data
+        const companies = [
+            {
+                id: 1,
+                name: "EcoProducts Inc.",
+                industry: "home",
+                description: "Sustainable household products and packaging",
+                rating: 4.5,
+                certifications: ["bcorp", "carbon-neutral"],
+                co2Reduction: 150,
+                waterSaved: 500,
+                wasteReduced: 200,
+                website: "https://ecoproducts.com"
+            },
+            {
+                id: 2,
+                name: "SolarTech Solutions",
+                industry: "tech",
+                description: "Renewable energy systems for homes and businesses",
+                rating: 4.7,
+                certifications: ["carbon-neutral"],
+                co2Reduction: 500,
+                waterSaved: 100,
+                wasteReduced: 50,
+                website: "https://solartech.com"
+            },
+            {
+                id: 3,
+                name: "GreenCycle Co.",
+                industry: "home",
+                description: "Waste management and recycling services",
+                rating: 4.3,
+                certifications: ["bcorp"],
+                co2Reduction: 300,
+                waterSaved: 200,
+                wasteReduced: 1000,
+                website: "https://greencycle.com"
+            },
+            {
+                id: 4,
+                name: "Organic Harvest",
+                industry: "food",
+                description: "Organic food products and delivery",
+                rating: 4.6,
+                certifications: ["organic", "fairtrade"],
+                co2Reduction: 100,
+                waterSaved: 300,
+                wasteReduced: 150,
+                website: "https://organicharvest.com"
+            },
+            {
+                id: 5,
+                name: "EcoFashion Co.",
+                industry: "fashion",
+                description: "Sustainable clothing and accessories",
+                rating: 4.4,
+                certifications: ["fairtrade"],
+                co2Reduction: 200,
+                waterSaved: 400,
+                wasteReduced: 180,
+                website: "https://ecofashion.com"
+            },
+            {
+                id: 6,
+                name: "GreenBeauty",
+                industry: "beauty",
+                description: "Natural and eco-friendly beauty products",
+                rating: 4.2,
+                certifications: ["organic"],
+                co2Reduction: 80,
+                waterSaved: 150,
+                wasteReduced: 120,
+                website: "https://greenbeauty.com"
+            }
+        ];
+
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCompanies();
+            updateWishlist();
+            updateImpactMetrics();
+            loadComparisonTable();
+        });
+
+        // Company display functions
+        function loadCompanies(filteredCompanies = companies) {
+            const container = document.getElementById('companies-container');
+            container.innerHTML = '';
+
+            filteredCompanies.forEach(company => {
+                const isInWishlist = greenCompaniesData.wishlist.includes(company.id);
+                
+                const companyCard = `
+                    <div class="green-company-card">
+                        <div class="green-company-logo">
+                            <i class="fas fa-${getCompanyIcon(company.industry)}"></i>
+                        </div>
+                        <h3>${company.name}</h3>
+                        <div class="green-rating">
+                            ${generateStars(company.rating)}
+                            <span>${company.rating}/5</span>
+                        </div>
+                        <p>${company.description}</p>
+                        <div class="green-certification-badges">
+                            ${company.certifications.map(cert => 
+                                `<span class="green-badge">${cert.toUpperCase()}</span>`
+                            ).join('')}
+                        </div>
+                        <div class="green-action-buttons">
+                            <button class="green-action-btn" onclick="addToWishlist(${company.id})" 
+                                    style="${isInWishlist ? 'background: #4CAF50; color: white;' : ''}">
+                                <i class="fas fa-heart"></i> ${isInWishlist ? 'In Wishlist' : 'Add to Wishlist'}
+                            </button>
+                            <button class="green-action-btn" onclick="visitWebsite('${company.website}')">
+                                <i class="fas fa-external-link-alt"></i> Visit
+                            </button>
+                            <button class="green-action-btn" onclick="supportCompany(${company.id})">
+                                <i class="fas fa-shopping-cart"></i> Support
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += companyCard;
+            });
+        }
+
+        function searchCompanies() {
+            const searchTerm = document.getElementById('company-search').value.toLowerCase();
+            const industryFilter = document.getElementById('industry-filter').value;
+            const certificationFilter = document.getElementById('certification-filter').value;
+
+            const filtered = companies.filter(company => {
+                const matchesSearch = company.name.toLowerCase().includes(searchTerm) || 
+                                    company.description.toLowerCase().includes(searchTerm);
+                const matchesIndustry = !industryFilter || company.industry === industryFilter;
+                const matchesCertification = !certificationFilter || 
+                                           company.certifications.includes(certificationFilter);
+                
+                return matchesSearch && matchesIndustry && matchesCertification;
+            });
+
+            loadCompanies(filtered);
+        }
+
+        function clearFilters() {
+            document.getElementById('company-search').value = '';
+            document.getElementById('industry-filter').value = '';
+            document.getElementById('certification-filter').value = '';
+            loadCompanies();
+        }
+
+        // Wishlist functions
+        function addToWishlist(companyId) {
+            const index = greenCompaniesData.wishlist.indexOf(companyId);
+            if (index === -1) {
+                greenCompaniesData.wishlist.push(companyId);
+                showNotification('Added to wishlist!', 'success');
+            } else {
+                greenCompaniesData.wishlist.splice(index, 1);
+                showNotification('Removed from wishlist', 'info');
+            }
+            updateWishlist();
+            saveGreenData();
+        }
+
+        function updateWishlist() {
+            const container = document.getElementById('wishlist-container');
+            container.innerHTML = '';
+
+            if (greenCompaniesData.wishlist.length === 0) {
+                container.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">Your wishlist is empty. Add some green companies!</p>';
+                return;
+            }
+
+            greenCompaniesData.wishlist.forEach(companyId => {
+                const company = companies.find(c => c.id === companyId);
+                if (company) {
+                    const wishlistItem = `
+                        <div class="green-company-card">
+                            <h4>${company.name}</h4>
+                            <p>${company.description}</p>
+                            <div class="green-action-buttons">
+                                <button class="green-action-btn" onclick="supportCompany(${company.id})">
+                                    <i class="fas fa-shopping-cart"></i> Purchase
+                                </button>
+                                <button class="green-action-btn" onclick="addToWishlist(${company.id})" style="background: #e74c3c; color: white;">
+                                    <i class="fas fa-times"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += wishlistItem;
+                }
+            });
+        }
+
+        function shareWishlist() {
+            const wishlistNames = greenCompaniesData.wishlist.map(id => {
+                const company = companies.find(c => c.id === id);
+                return company ? company.name : '';
+            }).filter(name => name !== '');
+
+            if (wishlistNames.length === 0) {
+                alert('Your wishlist is empty!');
+                return;
+            }
+
+            const message = `Check out my green companies wishlist: ${wishlistNames.join(', ')}. Support sustainable businesses with me!`;
+            alert(`Share your wishlist:\n\n${message}`);
+        }
+
+        function exportWishlist() {
+            const wishlistData = greenCompaniesData.wishlist.map(id => {
+                const company = companies.find(c => c.id === id);
+                return company ? `${company.name} - ${company.website}` : '';
+            }).filter(item => item !== '').join('\n');
+
+            if (wishlistData) {
+                alert('Copy your wishlist:\n\n' + wishlistData);
+            } else {
+                alert('Your wishlist is empty!');
+            }
+        }
+
+        // Company support functions
+        function supportCompany(companyId) {
+            const company = companies.find(c => c.id === companyId);
+            if (company) {
+                greenCompaniesData.purchases.push({
+                    companyId: companyId,
+                    date: new Date().toISOString(),
+                    impact: {
+                        co2Saved: company.co2Reduction,
+                        waterSaved: company.waterSaved,
+                        wasteReduced: company.wasteReduced
+                    }
+                });
+
+        
+                greenCompaniesData.impact.co2Saved += company.co2Reduction;
+                greenCompaniesData.impact.waterSaved += company.waterSaved;
+                greenCompaniesData.impact.wasteReduced += company.wasteReduced;
+                greenCompaniesData.impact.companiesSupported++;
+
+                updateImpactMetrics();
+                saveGreenData();
+                showNotification(`Thank you for supporting ${company.name}!`, 'success');
+            }
+        }
+
+        function visitWebsite(url) {
+            window.open(url, '_blank');
+        }
+
+    
+        function loadComparisonTable() {
+            const table = document.getElementById('comparison-table');
+            table.innerHTML = '';
+
+            companies.forEach(company => {
+                const row = `
+                    <tr>
+                        <td><strong>${company.name}</strong></td>
+                        <td>${getIndustryName(company.industry)}</td>
+                        <td>${company.rating}/5</td>
+                        <td>${company.certifications.map(c => c.toUpperCase()).join(', ')}</td>
+                        <td>${company.co2Reduction} kg reduced</td>
+                        <td>
+                            <button class="green-action-btn" onclick="addToWishlist(${company.id})" style="padding: 5px 10px;">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="green-action-btn" onclick="supportCompany(${company.id})" style="padding: 5px 10px;">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                table.innerHTML += row;
+            });
+        }
+
+        // Utility functions
+        function getCompanyIcon(industry) {
+            const icons = {
+                food: 'utensils',
+                fashion: 'tshirt',
+                tech: 'laptop',
+                home: 'home',
+                beauty: 'spa'
+            };
+            return icons[industry] || 'building';
+        }
+
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            let stars = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            if (halfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            for (let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        function getIndustryName(industry) {
+            const names = {
+                food: 'Food & Beverage',
+                fashion: 'Fashion',
+                tech: 'Technology',
+                home: 'Home Goods',
+                beauty: 'Beauty & Care'
+            };
+            return names[industry] || industry;
+        }
+
+        function updateImpactMetrics() {
+            document.getElementById('companies-supported').textContent = greenCompaniesData.impact.companiesSupported;
+            document.getElementById('eco-impact').textContent = '$' + (greenCompaniesData.impact.companiesSupported * 100).toLocaleString();
+            document.getElementById('green-score').textContent = 
+                Math.min(greenCompaniesData.impact.companiesSupported * 10, 100) + '%';
+            
+            document.getElementById('green-purchases').textContent = greenCompaniesData.purchases.length;
+            document.getElementById('co2-saved').textContent = greenCompaniesData.impact.co2Saved;
+            document.getElementById('water-saved').textContent = greenCompaniesData.impact.waterSaved;
+            document.getElementById('waste-reduced').textContent = greenCompaniesData.impact.wasteReduced;
+        }
+
+        function showCertification(type) {
+            const info = {
+                bcorp: 'B Corp Certification: Meets highest standards of social and environmental performance',
+                organic: 'Organic Certification: Products grown without synthetic pesticides or fertilizers',
+                fairtrade: 'Fair Trade: Ensures fair prices and working conditions for producers',
+                leed: 'LEED Certification: Leadership in Energy and Environmental Design for buildings'
+            };
+            alert(info[type] || 'Certification information not available');
+        }
+
+        function saveGreenData() {
+            localStorage.setItem('greenCompaniesData', JSON.stringify(greenCompaniesData));
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `green-notification ${type}`;
+            notification.textContent = message;
+            notification.style.background = type === 'error' ? '#e74c3c' : '#2ecc71';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,445 @@
+{% extends "base.html" %} {% block title %}Renewable Energy - EcoAir{% endblock
+%} {% block content %}
+<nav class="subnav">
+  <div class="container">
+    <a href="{{ url_for('index') }}" class="back-btn"
+      ><i class="fas fa-arrow-left"></i> Back to EcoAir</a
+    >
+    <div class="subnav-links">
+      <a href="{{ url_for('renewable_energy') }}" class="active"
+        >Renewable Energy</a
+      >
+      <a href="{{ url_for('waste_management') }}">Waste Management</a>
+      <a href="{{ url_for('green_companies') }}">Green Companies</a>
+      <a href="{{ url_for('carbon_offset') }}">Carbon Offset</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <section class="renew-page-hero">
+    <div class="renew-hero-content">
+      <h2>Power Your Life with Clean Energy</h2>
+      <p>
+        Calculate savings, find providers, and track your renewable energy
+        journey
+      </p>
+    </div>
+    <div class="renew-hero-stats">
+      <div class="renew-stat">
+        <div class="renew-stat-number" id="user-savings">$0</div>
+        <div class="stat-label">Your Potential Savings</div>
+      </div>
+      <div class="renew-stat">
+        <div class="renew-stat-number" id="co2-saved">0</div>
+        <div class="stat-label">CO₂ Saved (kg)</div>
+      </div>
+      <div class="renew-stat">
+        <div class="renew-stat-number" id="energy-progress">0%</div>
+        <div class="stat-label">Green Energy Usage</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solar Calculator Section -->
+  <section class="renew-calculator">
+    <h2><i class="fas fa-calculator"></i> Solar Savings Calculator</h2>
+    <p>Calculate how much you can save by switching to solar energy</p>
+
+    <div class="calc-form">
+      <div class="form-group">
+        <label>Monthly Electricity Bill ($):</label>
+        <input
+          type="number"
+          id="monthly-bill"
+          placeholder="Enter amount"
+          min="0"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Roof Area (sq ft):</label>
+        <input type="number" id="roof-area" placeholder="Enter area" min="0" />
+      </div>
+
+      <div class="form-group">
+        <label>Location:</label>
+        <input type="text" id="location" placeholder="Enter your location" />
+      </div>
+
+      <div class="renew-action-buttons">
+        <button class="renew-action-btn" onclick="calculateSavings()">
+          <i class="fas fa-calculator"></i> Calculate Savings
+        </button>
+        <button class="renew-action-btn" onclick="saveEnergyPlan()">
+          <i class="fas fa-save"></i> Save Plan
+        </button>
+      </div>
+
+      <div id="calc-result" class="renew-result">
+        <h3>Your Solar Potential</h3>
+        <div id="savings-output"></div>
+        <div id="co2-output"></div>
+        <div id="payback-period"></div>
+        <button
+          class="renew-action-btn"
+          onclick="shareResults()"
+          style="background: #4caf50"
+        >
+          <i class="fas fa-share"></i> Share Results
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Energy Provider Comparison -->
+  <section>
+    <h2><i class="fas fa-bolt"></i> Green Energy Providers</h2>
+    <p>Compare and choose from certified renewable energy providers</p>
+
+    <div class="renew-provider-grid">
+      <div class="renew-provider-card">
+        <i class="fas fa-sun" style="color: #ffd700; font-size: 2.5rem"></i>
+        <h3>SunPower</h3>
+        <p>Residential Solar Installations</p>
+        <div class="rating">★★★★☆ 4.2/5</div>
+        <p><strong>Savings:</strong> 40-60% on bills</p>
+        <button class="renew-action-btn" onclick="contactProvider('SunPower')">
+          Contact
+        </button>
+      </div>
+
+      <div class="renew-provider-card">
+        <i class="fas fa-wind" style="color: #667eea; font-size: 2.5rem"></i>
+        <h3>WindFlow Energy</h3>
+        <p>Wind & Solar Solutions</p>
+        <div class="rating">★★★★★ 4.7/5</div>
+        <p><strong>Savings:</strong> 35-55% on bills</p>
+        <button
+          class="renew-action-btn"
+          onclick="contactProvider('WindFlow Energy')"
+        >
+          Contact
+        </button>
+      </div>
+
+      <div class="renew-provider-card">
+        <i class="fas fa-leaf" style="color: #4caf50; font-size: 2.5rem"></i>
+        <h3>GreenGrid</h3>
+        <p>100% Renewable Energy</p>
+        <div class="rating">★★★★☆ 4.3/5</div>
+        <p><strong>Savings:</strong> 25-45% on bills</p>
+        <button class="renew-action-btn" onclick="contactProvider('GreenGrid')">
+          Contact
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Progress Tracker -->
+  <section class="renew-progress-tracker">
+    <h2><i class="fas fa-tasks"></i> Your Renewable Energy Journey</h2>
+    <p>Track your progress towards energy independence</p>
+
+    <div class="renew-progress-steps">
+      <div class="renew-step active" id="step1">
+        <div class="renew-step-number">1</div>
+        <h4>Assessment</h4>
+        <p>Calculate potential</p>
+      </div>
+      <div class="renew-step" id="step2">
+        <div class="renew-step-number">2</div>
+        <h4>Planning</h4>
+        <p>Choose provider</p>
+      </div>
+      <div class="renew-step" id="step3">
+        <div class="renew-step-number">3</div>
+        <h4>Installation</h4>
+        <p>System setup</p>
+      </div>
+      <div class="renew-step" id="step4">
+        <div class="renew-step-number">4</div>
+        <h4>Operation</h4>
+        <p>Generating power</p>
+      </div>
+    </div>
+
+    <div class="renew-action-buttons">
+      <button
+        class="renew-action-btn"
+        onclick="updateProgress('next')"
+        id="next-btn"
+      >
+        <i class="fas fa-arrow-right"></i> Next Step
+      </button>
+      <button
+        class="renew-action-btn"
+        onclick="updateProgress('reset')"
+        style="background: #e74c3c"
+      >
+        <i class="fas fa-redo"></i> Restart Journey
+      </button>
+    </div>
+  </section>
+
+  <!-- Community Section -->
+  <section>
+    <h2><i class="fas fa-users"></i> Community Impact</h2>
+    <div class="impact-grid">
+      <div class="impact-card">
+        <i class="fas fa-solar-panel"></i>
+        <div class="impact-value" id="community-solar">1,247</div>
+        <div class="impact-label">Solar Installations</div>
+      </div>
+      <div class="impact-card">
+        <i class="fas fa-wind"></i>
+        <div class="impact-value" id="community-wind">589</div>
+        <div class="impact-label">Wind Projects</div>
+      </div>
+      <div class="impact-card">
+        <i class="fas fa-cloud"></i>
+        <div class="impact-value" id="community-co2">2.5M</div>
+        <div class="impact-label">CO₂ Reduced (kg)</div>
+      </div>
+    </div>
+
+    <div class="renew-action-buttons">
+      <button
+        class="renew-action-btn"
+        onclick="joinCommunity()"
+        style="background: #4caf50"
+      >
+        <i class="fas fa-user-plus"></i> Join Community
+      </button>
+      <button
+        class="renew-action-btn"
+        onclick="shareAchievement()"
+        style="background: #3498db"
+      >
+        <i class="fas fa-trophy"></i> Share Achievement
+      </button>
+    </div>
+  </section>
+</main>
+{% endblock %} {% block extra_js %}
+<script>
+  
+  let userEnergyData = JSON.parse(localStorage.getItem("userEnergyData")) || {
+    savings: 0,
+    co2Saved: 0,
+    progress: 0,
+    currentStep: 1,
+    providerContacts: [],
+    communityJoined: false,
+  };
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    updateUserStats();
+    loadProgress();
+    updateCommunityStats();
+  });
+
+  // Calculator functions
+  function calculateSavings() {
+    const bill = parseFloat(document.getElementById("monthly-bill").value);
+    const area = parseFloat(document.getElementById("roof-area").value);
+    let locationFactor = parseFloat(document.getElementById("location").value);
+
+    if (isNaN(locationFactor)) {
+      locationFactor = 1.0;
+    }
+
+    if (!bill || !area) {
+      alert("Please enter monthly bill and roof area");
+      return;
+    }
+
+    const annualSavings = bill * 12 * 0.7 * locationFactor;
+    const co2Reduction = annualSavings * 0.8;
+    const paybackYears = (15000 / annualSavings).toFixed(1);
+
+    document.getElementById(
+      "savings-output"
+    ).innerHTML = `<p><strong>Annual Savings:</strong> $${annualSavings.toFixed(
+      2
+    )}</p>
+             <p><strong>Monthly Savings:</strong> $${(
+               annualSavings / 12
+             ).toFixed(2)}</p>`;
+
+    document.getElementById(
+      "co2-output"
+    ).innerHTML = `<p><strong>CO₂ Reduction:</strong> ${co2Reduction.toFixed(
+      2
+    )} kg per year</p>`;
+
+    document.getElementById(
+      "payback-period"
+    ).innerHTML = `<p><strong>Payback Period:</strong> ${paybackYears} years</p>`;
+
+    document.getElementById("calc-result").style.display = "block";
+
+    
+    userEnergyData.savings = annualSavings;
+    userEnergyData.co2Saved = co2Reduction;
+    updateUserStats();
+    saveUserData();
+  }
+
+  function saveEnergyPlan() {
+    if (userEnergyData.savings === 0) {
+      alert("Please calculate savings first");
+      return;
+    }
+
+    userEnergyData.progress = 25;
+    updateProgress("save");
+    showNotification("Energy plan saved successfully!", "success");
+  }
+
+  function shareResults() {
+    const message = `I just calculated my solar potential with EcoAir! I could save $${userEnergyData.savings.toFixed(
+      2
+    )} per year and reduce CO₂ by ${userEnergyData.co2Saved.toFixed(
+      2
+    )} kg. Check it out!`;
+    alert(`Share this message: "${message}"`);
+  }
+
+  // Provider functions
+  function contactProvider(providerName) {
+    if (!userEnergyData.providerContacts.includes(providerName)) {
+      userEnergyData.providerContacts.push(providerName);
+      userEnergyData.progress = 50;
+      updateProgress("contact");
+      saveUserData();
+    }
+
+    showNotification(
+      `Contact request sent to ${providerName}! They will reach out within 24 hours.`,
+      "success"
+    );
+  }
+
+  // Progress tracking
+  function updateProgress(action) {
+    const steps = document.querySelectorAll(".renew-step");
+
+    if (action === "next") {
+      if (userEnergyData.currentStep < 4) {
+        userEnergyData.currentStep++;
+        userEnergyData.progress = userEnergyData.currentStep * 25;
+      }
+    } else if (action === "reset") {
+      userEnergyData.currentStep = 1;
+      userEnergyData.progress = 0;
+      userEnergyData.providerContacts = [];
+    } else if (action === "save") {
+      userEnergyData.currentStep = 2;
+      userEnergyData.progress = 50;
+    } else if (action === "contact") {
+      userEnergyData.currentStep = 3;
+      userEnergyData.progress = 75;
+    } else if (action === "load") {
+    }
+
+    steps.forEach((step, index) => {
+      if (index < userEnergyData.currentStep) {
+        step.classList.add("active");
+      } else {
+        step.classList.remove("active");
+      }
+    });
+
+    document.getElementById("energy-progress").textContent =
+      userEnergyData.progress + "%";
+
+    if (userEnergyData.currentStep === 4) {
+      document.getElementById("next-btn").style.display = "none";
+      showNotification(
+        "Congratulations! You completed your renewable energy journey!",
+        "success"
+      );
+      addEcoPoints(100);
+    } else {
+      document.getElementById("next-btn").style.display = "inline-block";
+    }
+
+    saveUserData();
+  }
+
+  function loadProgress() {
+    updateProgress("load");
+  }
+
+  // Community functions
+  function joinCommunity() {
+    userEnergyData.communityJoined = true;
+    showNotification("Welcome to the Renewable Energy Community!", "success");
+    addEcoPoints(50);
+    updateCommunityStats();
+    saveUserData();
+  }
+
+  function shareAchievement() {
+    if (userEnergyData.progress === 100) {
+      const message = `I just completed my renewable energy journey with EcoAir! I'm saving $${userEnergyData.savings.toFixed(
+        2
+      )} annually and reducing my carbon footprint. Join me!`;
+      alert(`Share your achievement: "${message}"`);
+      addEcoPoints(25);
+    } else {
+      alert("Complete your energy journey first to share achievements!");
+    }
+  }
+
+  function showResource(resourceType) {
+    const resources = {
+      "solar-guide": "Download our comprehensive solar installation guide",
+      rebates: "Check available government rebates and tax credits",
+      financing: "Explore financing options for your solar project",
+      maintenance: "Learn about solar system maintenance best practices",
+    };
+    alert(resources[resourceType]);
+  }
+
+  // Utility functions
+  function updateUserStats() {
+    document.getElementById("user-savings").textContent =
+      "$" + userEnergyData.savings.toFixed(0);
+    document.getElementById("co2-saved").textContent =
+      userEnergyData.co2Saved.toFixed(0);
+    document.getElementById("energy-progress").textContent =
+      userEnergyData.progress + "%";
+  }
+
+  function updateCommunityStats() {
+    
+    document.getElementById("community-solar").textContent = (
+      1247 + Math.floor(Math.random() * 100)
+    ).toLocaleString();
+    document.getElementById("community-wind").textContent = (
+      589 + Math.floor(Math.random() * 50)
+    ).toLocaleString();
+    document.getElementById("community-co2").textContent =
+      (2.5 + Math.random()).toFixed(1) + "M";
+  }
+
+  function saveUserData() {
+    localStorage.setItem("userEnergyData", JSON.stringify(userEnergyData));
+  }
+
+  function addEcoPoints(points) {
+    if (typeof window.addPoints === "function") {
+      window.addPoints(points, "Renewable energy activity");
+    } else {
+      alert(`+${points} Eco Points earned!`);
+    }
+  }
+
+  function showNotification(message, type) {
+    alert(message);
+  }
+</script>
+{% endblock %}

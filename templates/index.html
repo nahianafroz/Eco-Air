@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}EcoAir — Real-Time Air Quality & Tree Tracker{% endblock %}
+
+{% block content %}
+<main class="container">
+    <!-- Rewards & Points System -->
+    <section id="rewards-section">
+        <div class="rewards-container">
+            <div class="points-display">
+                <div class="points-card">
+                    <h3><i class="fas fa-coins"></i> Your Eco Points</h3>
+                    <div id="points-value" class="points-value">0</div>
+                    <p>Earn points by taking eco-friendly actions</p>
+                </div>
+            </div>
+            <div class="rewards-shop">
+                <h3><i class="fas fa-gift"></i> Redeem Rewards</h3>
+                <div class="rewards-grid">
+                    <div class="reward-item" data-cost="100">
+                        <i class="fas fa-tree"></i>
+                        <h4>Plant a Tree</h4>
+                        <p>100 points</p>
+                        <button class="redeem-btn">Redeem</button>
+                    </div>
+                    <div class="reward-item" data-cost="200">
+                        <i class="fas fa-seedling"></i>
+                        <h4>Seed Pack</h4>
+                        <p>200 points</p>
+                        <button class="redeem-btn">Redeem</button>
+                    </div>
+                    <div class="reward-item" data-cost="500">
+                        <i class="fas fa-award"></i>
+                        <h4>Eco Kit</h4>
+                        <p>500 points</p>
+                        <button class="redeem-btn">Redeem</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- City Search Section -->
+    <section id="search-section">
+        <div class="search-container">
+            <input type="text" id="city-input" placeholder="Enter city name...">
+            <button id="search-btn"><i class="fas fa-search"></i> Check Air Quality</button>
+        </div>
+    </section>
+
+    <!-- AQI Dashboard -->
+    <section id="aqi-dashboard" class="hidden">
+        <h2>Air Quality Dashboard</h2>
+        <div class="dashboard-container">
+            <div class="aqi-main">
+                <div id="aqi-value" class="aqi-value">--</div>
+                <div id="aqi-status" class="aqi-status">--</div>
+                <div id="city-name" class="city-name">--</div>
+            </div>
+            <div class="pollutants-grid">
+                <div class="pollutant-card">
+                    <h3>PM2.5</h3>
+                    <div id="pm25-value" class="pollutant-value">--</div>
+                    <div id="pm25-status" class="pollutant-status">--</div>
+                </div>
+                <div class="pollutant-card">
+                    <h3>PM10</h3>
+                    <div id="pm10-value" class="pollutant-value">--</div>
+                    <div id="pm10-status" class="pollutant-status">--</div>
+                </div>
+                <div class="pollutant-card">
+                    <h3>CO₂</h3>
+                    <div id="co2-value" class="pollutant-value">--</div>
+                    <div id="co2-status" class="pollutant-status">--</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pollution Tips -->
+    <section id="pollution-tips" class="hidden">
+        <h2>Health & Safety Tips</h2>
+        <div id="tips-container" class="tips-container">
+        </div>
+    </section>
+
+    <!-- Environmental Impact -->
+    <section id="impact-section" class="hidden">
+        <h2>Your Environmental Impact</h2>
+        <div class="impact-grid">
+            <div class="impact-card">
+                <i class="fas fa-tree"></i>
+                <div class="impact-value" id="co2-reduced">0</div>
+                <div class="impact-label">CO₂ Reduced (kg)</div>
+            </div>
+            <div class="impact-card">
+                <i class="fas fa-car"></i>
+                <div class="impact-value" id="cars-offset">0</div>
+                <div class="impact-label">Cars Offset</div>
+            </div>
+            <div class="impact-card">
+                <i class="fas fa-wind"></i>
+                <div class="impact-value" id="air-purified">0</div>
+                <div class="impact-label">Air Purified (m³)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historical Data & Charts -->
+    <section id="historical-data" class="hidden">
+        <h2>Air Quality Trends</h2>
+        <div class="chart-container">
+            <canvas id="aqi-chart"></canvas>
+        </div>
+    </section>
+
+    <!-- Tree Planting Tracker -->
+    <section id="tree-tracker">
+        <h2>Eco Actions Tracker</h2>
+        <div class="tracker-container">
+            <div class="tree-counter">
+                <h3>Total Trees Planted</h3>
+                <div id="tree-count" class="tree-count">0</div>
+                <div class="impact-info">
+                    <i class="fas fa-leaf"></i>
+                    <span id="oxygen-produced">0</span> kg oxygen produced
+                </div>
+            </div>
+            
+            <div class="eco-actions">
+                <h3>Log Your Eco Actions</h3>
+                <div class="action-form">
+                    <div class="form-group">
+                        <label for="tree-input">Trees Planted Today:</label>
+                        <input type="number" id="tree-input" min="0" max="50" value="0">
+                        <small>+10 points per tree</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Eco Transportation Used:</label>
+                        <div class="transport-options">
+                            <label class="option-label">
+                                <input type="radio" name="transport" value="walking">
+                                <i class="fas fa-walking"></i>
+                                <span>Walking</span>
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="transport" value="bicycle">
+                                <i class="fas fa-bicycle"></i>
+                                <span>Bicycle</span>
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="transport" value="carpool">
+                                <i class="fas fa-users"></i>
+                                <span>Carpool</span>
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="transport" value="electric">
+                                <i class="fas fa-car-battery"></i>
+                                <span>Electric Vehicle</span>
+                            </label>
+                        </div>
+                        <small>+50 points per trip</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="energy-input">Energy Saved (kWh):</label>
+                        <input type="number" id="energy-input" min="0" value="0">
+                        <small>+5 points per kWh</small>
+                    </div>
+                    
+                    <button id="log-action-btn">
+                        <i class="fas fa-seedling"></i> Log Eco Action & Earn Points
+                    </button>
+                </div>
+            </div>
+            
+            <div class="eco-badges">
+                <h3>Your Eco Badges</h3>
+                <div id="badges-container" class="badges-container">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Steps Section -->
+    <section id="future-steps">
+        <h2>Future Steps to Reduce Air Pollution</h2>
+        <div class="steps-grid">
+            <a href="{{ url_for('renewable_energy') }}" class="step-card">
+                <i class="fas fa-solar-panel"></i>
+                <h4>Switch to Renewable Energy</h4>
+                <p>Install solar panels or choose green energy providers</p>
+                <span class="click-here">Click to explore →</span>
+            </a>
+            <a href="{{ url_for('waste_management') }}" class="step-card">
+                <i class="fas fa-recycle"></i>
+                <h4>Waste Management</h4>
+                <p>Reduce, reuse, recycle - proper waste segregation</p>
+                <span class="click-here">Click to explore →</span>
+            </a>
+            <a href="{{ url_for('green_companies') }}" class="step-card">
+                <i class="fas fa-hand-holding-usd"></i>
+                <h4>Support Green Companies</h4>
+                <p>Choose products from environmentally responsible companies</p>
+                <span class="click-here">Click to explore →</span>
+            </a>
+            <a href="{{ url_for('carbon_offset') }}" class="step-card">
+                <i class="fas fa-tree"></i>
+                <h4>Carbon Offset Programs</h4>
+                <p>Invest in carbon offset projects and tree plantation drives</p>
+                <span class="click-here">Click to explore →</span>
+            </a>
+        </div>
+    </section>
+</main>
+{% endblock %}
