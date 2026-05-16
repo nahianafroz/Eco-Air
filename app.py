@@ -149,7 +149,7 @@ if not os.path.exists('database'):
     os.makedirs('database')
 
 
-init_db()
+
 
 def get_db_connection():
     conn = sqlite3.connect('database/ecoair.db')
@@ -630,4 +630,6 @@ def carbon_offset():
     return render_template('carbon-offset.html', user_data=user_data, projects=project_list)
 
 if __name__ == '__main__':
+    if not os.path.exists('database/ecoair.db'):
+        init_db()
     app.run(debug=True, host='0.0.0.0', port=5000)
